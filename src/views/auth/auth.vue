@@ -1,7 +1,9 @@
 /**
 *
 * Author: GhostCat
-* CreatDate: 2020-01-03 20:12:52
+* CreatDate: 2020-01-03 20:28:14
+*
+* Description: 登录校验页面
 *
 */
 <style lang='scss' scoped type='text/scss'>
