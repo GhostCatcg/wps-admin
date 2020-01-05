@@ -8,7 +8,6 @@
 */
 
 <style lang='scss' scoped type='text/scss'>
-
 .index-wapper {
   height: 100%;
   #components-layout-demo-custom-trigger {
@@ -44,7 +43,7 @@
 
 <template>
   <div class="index-wapper">
-    <a-layout id="components-layout-demo-custom-trigger">
+    <a-layout id="components-layout-demo-custom-trigger" v-if="show">
       <a-layout-sider :trigger="null" collapsible v-model="collapsed">
         <div class="logo" />
         <a-menu theme="dark" mode="inline" :defaultSelectedKeys="['1']">
@@ -78,13 +77,15 @@
 </template>
 
 <script>
+import Printer from "@/js/printer";
 export default {
   name: "index",
   components: {},
   props: {},
   data() {
     return {
-      collapsed: false
+      collapsed: false,
+      show: true
     };
   },
   created() {},
