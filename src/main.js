@@ -11,7 +11,8 @@ import router from '@/router' // 引入路由
 // import store from '@/store'
 
 
-
+// 导入所有全局样式文件（保证所有全局样式在组件样式之前，需要在 App.vue 之前导入）
+import '@/assets/scss'
 
 // 使用Ant Design框架
 import 'ant-design-vue/dist/antd.css'; // or 'ant-design-vue/dist/antd.less'

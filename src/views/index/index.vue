@@ -10,6 +10,15 @@
 <style lang='scss' scoped type='text/scss'>
 .index-wapper {
   height: 100%;
+  .index-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
   #components-layout-demo-custom-trigger {
     height: 100%;
     .trigger {
@@ -45,19 +54,17 @@
   <div class="index-wapper">
     <a-layout id="components-layout-demo-custom-trigger" v-if="show">
       <a-layout-sider :trigger="null" collapsible v-model="collapsed">
-        <div class="logo" />
-        <a-menu theme="dark" mode="inline" :defaultSelectedKeys="['1']">
-          <a-menu-item key="1">
-            <a-icon type="user" />
-            <span>nav 1</span>
-          </a-menu-item>
-          <a-menu-item key="2">
-            <a-icon type="video-camera" />
-            <span>nav 2</span>
-          </a-menu-item>
-          <a-menu-item key="3">
-            <a-icon type="upload" />
-            <span>nav 3</span>
+        <div class="index-logo logo">CG 顽皮斯</div>
+        <a-menu
+          v-for="(item,index) in menu"
+          :key="index"
+          theme="dark"
+          mode="inline"
+          :defaultSelectedKeys="['1']"
+        >
+          <a-menu-item class="index-menu-item" :key="item.index" :data-msg="item.index" click>
+            <a-icon :type="item.icon" />
+            <span>{{item.name}}</span>
           </a-menu-item>
         </a-menu>
       </a-layout-sider>
@@ -69,7 +76,9 @@
             @click="()=> collapsed = !collapsed"
           />
         </a-layout-header>
-        <a-layout-content class="index-content">内容</a-layout-content>
+        <a-layout-content class="index-content">
+          <router-view></router-view>
+        </a-layout-content>
         <a-layout-footer class="index-footer">CG顽皮斯 ©2019 Created by GhostCat</a-layout-footer>
       </a-layout>
     </a-layout>
@@ -85,7 +94,21 @@ export default {
   data() {
     return {
       collapsed: false,
-      show: true
+      show: true,
+      menu: [
+        {
+          name: "公司管理",
+          icon: "global"
+        },
+        {
+          name: "人员管理",
+          icon: "team"
+        },
+        {
+          name: "系统管理",
+          icon: "setting"
+        }
+      ]
     };
   },
   created() {},

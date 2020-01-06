@@ -1,0 +1,39 @@
+/*
+ * @Author: lgc
+ * @Description: 引入字体
+ */
+
+@import '../font/ali/iconfont.css';
+
+@font-face {
+  font-family: HKXZY;
+  src: url('../font/hkxzy.TTF');
+}
+.HKXZY {
+  font-family: HKXZY;
+}
+@font-face {
+  font-family: DS-DIGIB;
+  src: url('../font/DS-DIGIB.TTF');
+}
+.DS-DIGIB {
+  font-family: DS-DIGIB;
+}
+@font-face {
+  font-family: DS-DIGI;
+  src: url('../font/DS-DIGI.TTF');
+}
+.DS-DIGI {
+  font-family: DS-DIGI;
+}
+@font-face {
+  font-family: FZCQJW;
+  src: url('../font/FZCQJW.TTF');
+}
+.FZCQJW {
+  font-family: FZCQJW;
+}
+html,
+body {
+  font-family: 'MicrosoftYaHei';
+}

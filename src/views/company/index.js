@@ -4,4 +4,4 @@
 *  @Description: 路由模块聚合
 */
 
-export { default as TypePage } from './type.vue' // 校验首页
+export { default as CompanyPage } from './company.vue' // 公司管理
