@@ -10,7 +10,7 @@ import {
 export default [
     {
         path: '/auth',
-        name: AuthPage.name,
+        name: "auth",
         component: AuthPage,
         meta: {
             title: '登录',

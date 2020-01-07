@@ -62,9 +62,16 @@
           mode="inline"
           :defaultSelectedKeys="['1']"
         >
-          <a-menu-item class="index-menu-item" :key="item.index" :data-msg="item.index" click>
-            <a-icon :type="item.icon" />
-            <span>{{item.name}}</span>
+          <a-menu-item
+            class="index-menu-item"
+            :class="item.index"
+            :key="index"
+            :data-msg="item.index"
+          >
+            <router-link :to="item.url">
+              <a-icon :type="item.icon" />
+              <span>{{item.name}}</span>
+            </router-link>
           </a-menu-item>
         </a-menu>
       </a-layout-sider>
@@ -98,15 +105,18 @@ export default {
       menu: [
         {
           name: "公司管理",
-          icon: "global"
+          icon: "global",
+          url: "/company"
         },
         {
           name: "人员管理",
-          icon: "team"
+          icon: "team",
+          url: "/people"
         },
         {
           name: "系统管理",
-          icon: "setting"
+          icon: "setting",
+          url: ""
         }
       ]
     };
