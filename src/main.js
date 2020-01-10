@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import store from './store'
 
 // 引入MuseUI 由于官网插件做的不是那么好看，打入后宫，使用ant
 // import MuseUI from 'muse-ui';
@@ -26,5 +27,6 @@ Vue.config.productionTip = false
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')
