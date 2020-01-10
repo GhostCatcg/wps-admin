@@ -9,7 +9,7 @@ import NotFound from '@/views/404' // 404页面
 
 import authRoutes from './auth.routes' // 登录校验路由
 import CompanyRoutes from './company.routes' // 公司管理路由
-
+import PeopleRoutes from './people.routes' // 个人管理路由
 
 const rootRoute = {
     path: '/',
@@ -18,6 +18,7 @@ const rootRoute = {
     // 重定向到项目列表页
     children: [
         ...CompanyRoutes,
+        ...PeopleRoutes
     ]
 }
 
