@@ -7,7 +7,7 @@
 *
 */
 
-<style lang='scss' scoped type='text/scss'>
+<style  lang="scss" socped type='text/scss'>
 .index-wapper {
   height: 100%;
   .index-logo {
@@ -50,10 +50,11 @@
 }
 </style>
 
+
 <template>
   <div class="index-wapper">
     <a-layout id="components-layout-demo-custom-trigger" v-if="show">
-      <a-layout-sider :trigger="null" collapsible v-model="collapsed">
+      <!-- <a-layout-sider :trigger="null" collapsible v-model="collapsed">
         <div class="index-logo logo">CG 顽皮斯</div>
         <a-menu
           v-for="(item,index) in menu"
@@ -74,7 +75,9 @@
             </router-link>
           </a-menu-item>
         </a-menu>
-      </a-layout-sider>
+      </a-layout-sider> -->
+      <side-menu></side-menu>
+
       <a-layout>
         <a-layout-header style="background: #fff; padding: 0">
           <a-icon
@@ -93,32 +96,19 @@
 </template>
 
 <script>
-import Printer from "@/js/printer";
+import sideMenu from '@/components/public/sideMenu.vue'
+// import side
 export default {
   name: "index",
-  components: {},
+  components: {
+    sideMenu
+  },
   props: {},
   data() {
     return {
       collapsed: false,
       show: true,
-      menu: [
-        {
-          name: "公司管理",
-          icon: "global",
-          url: "/company"
-        },
-        {
-          name: "人员管理",
-          icon: "team",
-          url: "/people"
-        },
-        {
-          name: "系统管理",
-          icon: "setting",
-          url: ""
-        }
-      ]
+      
     };
   },
   created() {},
