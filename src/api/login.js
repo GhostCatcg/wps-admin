@@ -1,4 +1,3 @@
-import api from './index'
 import { axios } from '@/utils/request'
 
 /**
@@ -12,9 +11,21 @@ import { axios } from '@/utils/request'
  * @param parameter
  * @returns {*}
  */
+
+const api = {
+  Login: '/pc/login/login', // 登录
+  Logout: '/pc/login/logout', // 退出
+  ForgePassword: '/auth/forge-password',
+  Register: '/auth/register',
+  twoStepCode: '/auth/2step-code',
+  SendSms: '/account/sms',
+  SendSmsErr: '/account/sms_err',
+  // get my info
+  UserInfo: '/pc/auth/menuTree' // 获取左侧菜单树结构
+}
 export function login (parameter) {
   return axios({
-    url: '/auth/login',
+    url: api.Login,
     method: 'post',
     data: parameter
   })
@@ -30,11 +41,12 @@ export function getSmsCaptcha (parameter) {
 
 export function getInfo () {
   return axios({
-    url: '/user/info',
-    method: 'get',
+    url: api.UserInfo,
+    method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
-    }
+    },
+    data: {}
   })
 }
 
@@ -47,11 +59,12 @@ export function getCurrentUserNav (token) {
 
 export function logout () {
   return axios({
-    url: '/auth/logout',
+    url: api.Logout,
     method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
-    }
+    },
+    data: {}
   })
 }
 

@@ -14,18 +14,19 @@ const whiteList = ['login', 'register', 'registerResult'] // no redirect whiteli
 const defaultRoutePath = '/dashboard/workplace'
 
 router.beforeEach((to, from, next) => {
-  NProgress.start() // start progress bar
+  NProgress.start() // start progress bar  开启模拟进度条
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${to.meta.title} - ${domTitle}`))
   if (Vue.ls.get(ACCESS_TOKEN)) {
     /* has token */
     if (to.path === '/user/login') {
       next({ path: defaultRoutePath })
-      NProgress.done()
+      NProgress.done() // 进去条结束
     } else {
       if (store.getters.roles.length === 0) {
         store
           .dispatch('GetInfo')
           .then(res => {
+            console.log('那边返回的结果', res)
             const roles = res.result && res.result.role
             store.dispatch('GenerateRoutes', { roles }).then(() => {
               // 根据roles权限生成可访问的路由表

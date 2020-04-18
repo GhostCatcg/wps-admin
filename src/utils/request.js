@@ -6,9 +6,13 @@ import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
 // 创建 axios 实例
+console.log('request.js', process.env.VUE_APP_API_BASE_URL)
 const service = axios.create({
-  baseURL: process.env.VUE_APP_API_BASE_URL, // api base_url
-  timeout: 6000 // 请求超时时间
+  baseURL: process.env.VUE_APP_API_BASE_URL, // 基础的RUL
+  timeout: 6000, // 请求超时时间
+  headers: {
+    area: 20 // 请求默认区域（公司残留）
+  }
 })
 
 const err = (error) => {
@@ -38,20 +42,27 @@ const err = (error) => {
   return Promise.reject(error)
 }
 
-// request interceptor
+/**
+ * // request interceptor 请求拦截
+ */
 service.interceptors.request.use(config => {
   const token = Vue.ls.get(ACCESS_TOKEN)
   if (token) {
-    config.headers['Access-Token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
+    config.headers['token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
   }
   return config
 }, err)
-
-// response interceptor
+/**
+ * // request interceptor 返回拦截
+ */
 service.interceptors.response.use((response) => {
-  return response.data
+  if (response.data.code === 0) {
+    return response.data
+  } else {
+    // return response.data.msg
+    throw Error(response.data.msg)
+  }
 }, err)
-
 const installer = {
   vm: {},
   install (Vue) {
