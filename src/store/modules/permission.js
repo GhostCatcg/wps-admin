@@ -63,6 +63,7 @@ const permission = {
   },
   actions: {
     GenerateRoutes ({ commit }, data) {
+      console.log('permission   GenerateRoutes')
       return new Promise(resolve => {
         const { roles } = data
         const accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
@@ -70,6 +71,9 @@ const permission = {
         resolve()
       })
     }
+    // CreateRoutes(){
+
+    // }
   }
 }
 
