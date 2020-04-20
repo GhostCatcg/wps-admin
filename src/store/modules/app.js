@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import {
-  SIDEBAR_TYPE,
-  DEFAULT_THEME,
+  SIDEBAR_TYPE, // 设置导航条类型
+  DEFAULT_THEME, // 设置主题色
   DEFAULT_LAYOUT_MODE,
   DEFAULT_COLOR,
   DEFAULT_COLOR_WEAK,

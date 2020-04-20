@@ -2,18 +2,19 @@ import Vue from 'vue'
 import store from '@/store/'
 import {
   ACCESS_TOKEN,
+  SIDEBAR_TYPE,
+  // 暂时注释掉页面风格配置
   DEFAULT_COLOR,
   DEFAULT_THEME,
   DEFAULT_LAYOUT_MODE,
   DEFAULT_COLOR_WEAK,
-  SIDEBAR_TYPE,
   DEFAULT_FIXED_HEADER,
   DEFAULT_FIXED_HEADER_HIDDEN,
   DEFAULT_FIXED_SIDEMENU,
   DEFAULT_CONTENT_WIDTH_TYPE,
   DEFAULT_MULTI_TAB
 } from '@/store/mutation-types'
-import config from '@/config/defaultSettings'
+import config from '@/config/defaultSettings'// 页面风格基础配置
 
 export default function Initializer () {
   console.log(`API_URL: ${process.env.VUE_APP_API_BASE_URL}`)

@@ -1,4 +1,5 @@
 import { asyncRouterMap, constantRouterMap } from '@/config/router.config'
+import { getRoutes } from '@/api/login' // 请求获取路由
 
 /**
  * 过滤账户是否拥有某一个权限，并将菜单从加载列表移除
@@ -70,10 +71,15 @@ const permission = {
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })
+    },
+    async CreateRoutes ({ commit }, data) {
+      console.log('获取用户路由')
+      const res = await getRoutes()
+      const accessedRouters = res.data.data.menuTreeList
+      console.log(accessedRouters)
+      commit('SET_ROUTERS', asyncRouterMap)
+      return asyncRouterMap // 先返回写死的路由
     }
-    // CreateRoutes(){
-
-    // }
   }
 }
 

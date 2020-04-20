@@ -1,16 +1,16 @@
 import Vue from 'vue'
-import { login, getInfo, logout } from '@/api/login'
+import { login, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
 const user = {
   state: {
-    token: '',
-    name: '',
-    welcome: '',
-    avatar: '',
-    roles: [],
-    info: {}
+    token: '', // token
+    name: '', // 姓名
+    welcome: '', // 欢迎语
+    avatar: '', // 头像
+    roles: [], // 用户权限
+    info: {} // 用户信息
   },
 
   mutations: {
@@ -39,9 +39,11 @@ const user = {
         login(userInfo).then(response => {
           console.log(response.data.data)
           const result = response.data.data
-          Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
-          commit('SET_TOKEN', result.token)
-          resolve()
+          Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000) // 把Token存入localStorage中，有过期时间
+          commit('SET_TOKEN', result.token) // 把Token存入vuex
+          commit('SET_NAME', { name: result.user.name, welcome: welcome() }) // 欢迎用户
+          commit('SET_AVATAR', result.user.avatar) // 头像
+          resolve() // 成功
         }).catch(error => {
           reject(error)
         })
@@ -51,48 +53,50 @@ const user = {
     // 获取用户信息
     GetInfo ({ commit }) {
       console.log('获取用户信息 - 飞雷神')
-      return new Promise((resolve, reject) => {
-        getInfo().then(response => {
-          // 把朱哥的数据结构映射成框架的数据结构
-          console.log(response)
-          /* eslint-disable no-unused-vars */
+      commit('SET_ROLES', [1, 2, 3])
+      commit('SET_INFO', { name: 'xxx' })
+      // return new Promise((resolve, reject) => {
+      //   getInfo().then(response => {
+      //     // 把朱哥的数据结构映射成框架的数据结构
+      //     console.log(response)
+      //     /* eslint-disable no-unused-vars */
 
-          // var res = {}
-          // res.message = response.msg
-          // res.code = response.code
-          // res.timestamp = '1587208682432'
-          // res.result = response.data.data.menuTreeList.map((item, index, arr) => {
-          //   console.log(item)
-          //   return item
-          // })
-          // console.log('最终映射成的结构', res)
+      //     // var res = {}
+      //     // res.message = response.msg
+      //     // res.code = response.code
+      //     // res.timestamp = '1587208682432'
+      //     // res.result = response.data.data.menuTreeList.map((item, index, arr) => {
+      //     //   console.log(item)
+      //     //   return item
+      //     // })
+      //     // console.log('最终映射成的结构', res)
 
-          const result = response.result
-          if (result.role && result.role.permissions.length > 0) {
-            const role = result.role
-            console.log(result)
-            role.permissions = result.role.permissions
-            role.permissions.map(per => {
-              if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
-                const action = per.actionEntitySet.map(action => { return action.action })
-                per.actionList = action
-              }
-            })
-            role.permissionList = role.permissions.map(permission => { return permission.permissionId })
-            commit('SET_ROLES', result.role)
-            commit('SET_INFO', result)
-          } else {
-            reject(new Error('getInfo: roles must be a non-null array !'))
-          }
+      //     const result = response.result
+      //     if (result.role && result.role.permissions.length > 0) {
+      //       const role = result.role
+      //       console.log(result)
+      //       role.permissions = result.role.permissions
+      //       role.permissions.map(per => {
+      //         if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
+      //           const action = per.actionEntitySet.map(action => { return action.action })
+      //           per.actionList = action
+      //         }
+      //       })
+      //       role.permissionList = role.permissions.map(permission => { return permission.permissionId })
+      //       commit('SET_ROLES', result.role)
+      //       commit('SET_INFO', result)
+      //     } else {
+      //       reject(new Error('getInfo: roles must be a non-null array !'))
+      //     }
 
-          commit('SET_NAME', { name: result.name, welcome: welcome() })
-          commit('SET_AVATAR', result.avatar)
+      //     commit('SET_NAME', { name: result.name, welcome: welcome() })
+      //     commit('SET_AVATAR', result.avatar)
 
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
-      })
+      //     resolve(response)
+      //   }).catch(error => {
+      //     reject(error)
+      //   })
+      // })
     },
 
     // 登出

@@ -63,7 +63,7 @@
 import { triggerWindowResizeEvent } from '@/utils/util'
 import { mapState, mapActions } from 'vuex'
 import { mixin, mixinDevice } from '@/utils/mixin'
-import config from '@/config/defaultSettings'
+import config from '@/config/defaultSettings'// 页面风格基础配置
 
 import RouteView from './RouteView'
 import SideMenu from '@/components/Menu/SideMenu'

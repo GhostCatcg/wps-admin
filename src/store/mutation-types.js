@@ -1,7 +1,7 @@
-export const ACCESS_TOKEN = 'token' // Access-Token
-export const SIDEBAR_TYPE = 'SIDEBAR_TYPE'
-export const DEFAULT_THEME = 'DEFAULT_THEME'
-export const DEFAULT_LAYOUT_MODE = 'DEFAULT_LAYOUT_MODE'
+export const ACCESS_TOKEN = 'token' // 用户token
+export const SIDEBAR_TYPE = 'SIDEBAR_TYPE' // 导航条类型
+export const DEFAULT_THEME = 'DEFAULT_THEME' // 暗和亮主题
+export const DEFAULT_LAYOUT_MODE = 'DEFAULT_LAYOUT_MODE' // 设置导航条在上方还是在侧边
 export const DEFAULT_COLOR = 'DEFAULT_COLOR'
 export const DEFAULT_COLOR_WEAK = 'DEFAULT_COLOR_WEAK'
 export const DEFAULT_FIXED_HEADER = 'DEFAULT_FIXED_HEADER'

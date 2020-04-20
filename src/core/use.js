@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueStorage from 'vue-ls'
-import config from '@/config/defaultSettings'
+import config from '@/config/defaultSettings' // 页面风格基础配置
 
 // base library
 import Antd from 'ant-design-vue'

@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
-import notification from 'ant-design-vue/es/notification'
+import notification from 'ant-design-vue/es/notification' // 提示
 import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
+import router from '@/router'
 
 // 创建 axios 实例
 console.log('request.js', process.env.VUE_APP_API_BASE_URL)
@@ -43,7 +44,7 @@ const err = (error) => {
 }
 
 /**
- * // request interceptor 请求拦截
+ * // request interceptor 发送请求时拦截
  */
 service.interceptors.request.use(config => {
   const token = Vue.ls.get(ACCESS_TOKEN)
@@ -53,11 +54,15 @@ service.interceptors.request.use(config => {
   return config
 }, err)
 /**
- * // request interceptor 返回拦截
+ * // request interceptor 返回数据时拦截
  */
 service.interceptors.response.use((response) => {
   if (response.data.code === 0) {
     return response.data
+  } else if (response.data.code === 110) {
+    // 110为登录超时，清空localStorage 进入登录页面
+    localStorage.clear()
+    router.push('/user/login')
   } else {
     // return response.data.msg
     throw Error(response.data.msg)
