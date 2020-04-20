@@ -52,5 +52,5 @@ router.beforeEach(async (to, from, next) => {
 })
 
 router.afterEach(() => {
-  NProgress.done() // finish progress bar
+  NProgress.done() // 关闭进度条
 })

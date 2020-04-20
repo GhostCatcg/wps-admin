@@ -11,6 +11,62 @@ export const asyncRouterMap = [
     meta: { title: '首页' },
     redirect: '/dashboard/workplace',
     children: [
+      // 基础管理
+      {
+        path: 'home',
+        name: 'home',
+        redirect: '/home/slideshow',
+        component: RouteView, // PageView,
+        meta: { title: '首页配置', keepAlive: true, icon: 'home', permission: [ 'table' ] },
+        children: [
+          {
+            path: '/home/slideshow',
+            name: 'slideshow',
+            component: () => import('@/views/home/SlideShow'),
+            meta: { title: '轮播图', keepAlive: false, permission: [ 'table' ] }
+          },
+          {
+            path: '/home/diamond',
+            name: 'diamond',
+            component: () => import('@/views/home/Diamond'),
+            meta: { title: '金刚图', keepAlive: true, permission: [ 'table' ] }
+          }
+        ]
+      },
+      // 系统设置
+      {
+        path: 'system',
+        name: 'system',
+        redirect: '/system/basic',
+        component: RouteView,
+        meta: { title: '系统设置', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        children: [
+          {
+            path: 'analysis/:pageNo([1-9]\\d*)?',
+            name: 'Analysis',
+            component: () => import('@/views/dashboard/Analysis'),
+            meta: { title: '用户管理', keepAlive: false, permission: [ 'dashboard' ] }
+          },
+          // 外部链接
+          {
+            path: 'https://www.baidu.com/',
+            name: 'Monitor',
+            meta: { title: '角色管理', target: '_blank' }
+          },
+          {
+            path: 'workplace',
+            name: 'Workplace',
+            component: () => import('@/views/dashboard/Workplace'),
+            meta: { title: '权限管理', keepAlive: true, permission: [ 'dashboard' ] }
+          },
+          {
+            path: 'test-work',
+            name: 'TestWork',
+            component: () => import('@/views/dashboard/TestWork'),
+            meta: { title: '资源配置', keepAlive: true, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
       // dashboard
       {
         path: 'dashboard',

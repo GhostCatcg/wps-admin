@@ -22,3 +22,19 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+::-webkit-scrollbar {
+  width: 8px;
+}
+// <!--修改 滚动条的 下面 的 样式-->
+::-webkit-scrollbar-track {
+  background-color: rgba(0,0,0,0);
+  border-radius: 20px;
+}
+// <!--修改 滑块 -->
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 20px;
+}
+</style>
