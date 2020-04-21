@@ -73,10 +73,9 @@ const permission = {
       })
     },
     async CreateRoutes ({ commit }, data) {
-      console.log('获取用户路由')
       const res = await getRoutes()
       const accessedRouters = res.data.data.menuTreeList
-      console.log(accessedRouters)
+      console.log('写死的路由', accessedRouters)
       commit('SET_ROUTERS', asyncRouterMap)
       return asyncRouterMap // 先返回写死的路由
     }

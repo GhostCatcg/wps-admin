@@ -1,4 +1,5 @@
 {
     "space_after_named_function":true,
-    "indent_size":2
+    "indent_size":2,
+    "space_after_anon_function":true
 }

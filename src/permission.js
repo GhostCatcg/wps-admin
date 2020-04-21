@@ -14,7 +14,6 @@ const whiteList = ['login', 'register', 'registerResult'] // no redirect whiteli
 const defaultRoutePath = '/dashboard/workplace'
 
 router.beforeEach(async (to, from, next) => {
-  console.log('路由拦截,进入之前', to)
   NProgress.start() // start progress bar  开启模拟进度条
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${to.meta.title} - ${domTitle}`))
   if (Vue.ls.get(ACCESS_TOKEN)) { // 如果有token
@@ -25,8 +24,9 @@ router.beforeEach(async (to, from, next) => {
     } else {
       if (store.getters.addRouters.length === 0) { // 如果没有路由, 先请求路由
         const res = await store.dispatch('CreateRoutes')
-        console.log('路由拦截里面的11', res)
-        router.addRoutes(store.getters.addRouters)
+        // console.log('路由拦截里面的11', res)
+        // router.addRoutes(store.getters.addRouters)
+        router.addRoutes(res)
         const redirect = decodeURIComponent(from.query.redirect || to.path)
         if (to.path === redirect) {
           // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record

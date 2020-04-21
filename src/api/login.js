@@ -44,3 +44,14 @@ export function logout () {
     data: {}
   })
 }
+// 获取验证码
+export function getSmsCaptcha () {
+  return axios({
+    url: api.Logout,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: {}
+  })
+}

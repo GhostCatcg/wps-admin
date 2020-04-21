@@ -7,26 +7,25 @@
 *
 */
 <style lang="scss">
-.slide-wapper{
-
-  th ,
+.slide-wapper {
+  th,
   td {
-  text-align: center !important;
-}
-.slide-photo{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  img{
-    height: 60px;
-    object-fit: contain;
+    text-align: center !important;
   }
-}
-.table-operator{
-  margin-bottom:20px;
-  display: flex;
-  justify-content: flex-end;
-}
+  .slide-photo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      height: 60px;
+      object-fit: contain;
+    }
+  }
+  .table-operator {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 </style>
 <template>
@@ -35,15 +34,23 @@
       <a-button type="primary" icon="plus" @click="$refs.createModal.add()">新建</a-button>
     </div>
 
-    <a-table bordered :columns="columns" :dataSource="data">
-      <div class="slide-photo" slot="photo" slot-scope="text">
-        {{text}}
-        <img :src="text" alt="">
+    <a-table
+      bordered
+      :columns="columns"
+      :dataSource="data"
+      :pagination="pagination"
+      :loading="tableLoading"
+      @change="tableChange"
+    >
+      <div class="slide-photo" slot="url" slot-scope="text">
+        <img :src="text" alt />
       </div>
-      <span slot="action">
+      <span slot="action" slot-scope="text, record">
         <a>编辑</a>
         <a-divider type="vertical" />
-        <a>删除</a>
+        <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.bannerId)">
+          <a>删除</a>
+        </a-popconfirm>
         <a-divider type="vertical" />
         <a class="ant-dropdown-link">
           更多
@@ -51,13 +58,13 @@
         </a>
       </span>
     </a-table>
-    <create-form ref="createModal" @ok="handleOk" />
+    <create-form ref="createModal" @refresh="slideList" />
   </a-card>
 </template>
 
 <script>
 import CreateForm from './modules/CreateForm'
-import { createSlideShow, updateSlideShow, listSlideShow } from '@/api/home'
+import { createSlideShow, updateSlideShow, listSlideShow, delSlideShow } from '@/api/home'
 export default {
   name: 'SlideShow',
   components: {
@@ -68,16 +75,16 @@ export default {
       // 表头
       columns: [
         {
-          dataIndex: 'key',
-          key: 'key',
+          dataIndex: 'sort',
+          key: 'sort',
           title: '序号',
           scopedSlots: { customRender: 'name' }
         },
         {
           title: '图片',
-          dataIndex: 'photo',
-          key: 'photo',
-          scopedSlots: { customRender: 'photo' }
+          dataIndex: 'url',
+          key: 'url',
+          scopedSlots: { customRender: 'url' }
         },
         {
           title: '操作',
@@ -85,27 +92,21 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      data: [
-        {
-            key: '1',
-            photo: '@/assets/logo.png',
-            address: 'New York No. 1 Lake Park'
-          },
-          {
-            key: '2',
-            photo: '@/assets/logo.png',
-            address: 'London No. 1 Lake Park'
-          },
-          {
-            key: '3',
-            photo: '@/assets/logo.png',
-            address: 'Sidney No. 1 Lake Park'
-          }
-      ]
+      data: [],
+      pagination: {
+        total: 0,
+        pageSize: 5, // 每页中显示10条数据
+        showTotal: total => `共有 ${total} 条数据` // 分页中显示总的数据
+      },
+      pageOption: {
+        pageNum: 1,
+        pageSize: 5
+      },
+      tableLoading: false
     }
   },
   created () {
-    this.detailSlide()
+    this.slideList()
   },
   methods: {
     createSlide () {
@@ -116,19 +117,41 @@ export default {
       console.log('更新')
       updateSlideShow()
     },
-    async detailSlide () {
-      const config = {
-        data: {
-          pageNum: 1,
-          pageSize: 10
-        }
+    ok () {
+      console.log('点击确定')
+    },
+    async handleDel (bannerId) {
+      const data = {
+        'bannerId': bannerId
       }
-      console.log(config.data)
+      const res = await delSlideShow(data)
+      if (res.code === 0) {
+        this.$message.success('删除成功')
+        this.slideList()
+      }
+    },
+    // 分页、排序、筛选变化时触发
+    tableChange (e) {
+      this.pageOption.pageNum = e.current
+      this.pageOption.pageSize = e.pageSize
+      this.slideList()
+    },
+    // 获取轮播图列表
+    async slideList () {
+      this.tableLoading = true
+      // const key = 'updatable'
+      // this.$message.loading({ content: '加载中...', key })
+      const config = {
+        data: this.pageOption
+      }
       const res = await listSlideShow(config.data)
-      console.log(res)
-      console.log(res.data.data)
-      // res.data.data.items
-      console.log(res)
+      if (res.code === 0) {
+        // this.$message.success({ content: '加载成功', key, duration: 2 })
+        this.data = res.data.data.items
+        this.pagination.pageSize = res.data.data.pageSize
+        this.pagination.total = res.data.data.total
+        this.tableLoading = false
+      }
     }
   }
 }

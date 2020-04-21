@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main login-wapper">
     <a-form
       id="formLogin"
       class="user-layout-login"
@@ -27,8 +27,7 @@
               placeholder="请输入用户名"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: '请输入用户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
-              ]"
+                {rules: [{ required: true, message: '请输入用户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
@@ -41,14 +40,13 @@
               autocomplete="false"
               placeholder="请输入密码"
               v-decorator="[
-                'password',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-              ]"
+                'password',{rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}]"
             >
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
           </a-form-item>
         </a-tab-pane>
+
         <a-tab-pane v-if="false" key="tab2" tab="手机号登录">
           <a-form-item>
             <a-input
@@ -296,7 +294,13 @@ export default {
   }
 }
 </script>
-
+<style lang="scss">
+.login-wapper {
+  /deep/ .ant-tabs-bar {
+    margin-bottom: 50px;
+  }
+}
+</style>
 <style lang='less' scoped>
 .user-layout-login {
   label {
