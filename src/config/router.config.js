@@ -17,7 +17,7 @@ export const asyncRouterMap = [
         name: 'home',
         redirect: '/home/slideshow',
         component: RouteView, // PageView,
-        meta: { title: '首页配置', keepAlive: true, icon: 'home', permission: [ 'table' ] },
+        meta: { title: '基础配置', keepAlive: true, icon: 'home', permission: [ 'table' ] },
         children: [
           {
             path: '/home/slideshow',

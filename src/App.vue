@@ -25,8 +25,8 @@ export default {
 
 <style lang="scss">
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 // <!--修改 滚动条的 下面 的 样式-->
 ::-webkit-scrollbar-track {

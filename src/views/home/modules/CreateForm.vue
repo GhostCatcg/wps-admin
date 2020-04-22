@@ -42,7 +42,7 @@
             id="inputNumber"
             :min="1"
             v-model="sort"
-            v-decorator="['desc', {rules: [{required: true, min: 3, message: '请输入至少三个字符的规则描述！'}]}]"
+            v-decorator="['sort', {rules: [{required: true, message: '请输入轮播图的顺序'}]}]"
             @change="onChange"
           />
         </a-form-item>
