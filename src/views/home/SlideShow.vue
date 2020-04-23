@@ -42,20 +42,22 @@
       :loading="tableLoading"
       @change="tableChange"
     >
+      <p slot="type" slot-scope="text">{{ text == 10 ? '首页' : '社区' }}</p>
+      <p slot="name" slot-scope="text">{{ text }}</p>
       <div class="slide-photo" slot="url" slot-scope="text">
         <img :src="text" alt />
       </div>
       <span slot="action" slot-scope="text, record">
-        <a>编辑</a>
+        <a @click="handleEdit(record.bannerId)">编辑</a>
         <a-divider type="vertical" />
         <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.bannerId)">
           <a>删除</a>
         </a-popconfirm>
-        <a-divider type="vertical" />
+        <!-- <a-divider type="vertical" />
         <a class="ant-dropdown-link">
           更多
           <a-icon type="down" />
-        </a>
+        </a>-->
       </span>
     </a-table>
     <create-form ref="createModal" @refresh="slideList" />
@@ -77,7 +79,19 @@ export default {
         {
           dataIndex: 'sort',
           key: 'sort',
-          title: '序号',
+          title: '排序',
+          scopedSlots: { customRender: 'sort' }
+        },
+        {
+          dataIndex: 'type',
+          key: 'type',
+          title: '类型',
+          scopedSlots: { customRender: 'type' }
+        },
+        {
+          dataIndex: 'name',
+          key: 'name',
+          title: '名称',
           scopedSlots: { customRender: 'name' }
         },
         {
@@ -95,7 +109,7 @@ export default {
       data: [],
       pagination: {
         total: 0,
-        pageSize: 5, // 每页中显示10条数据
+        pageSize: 5, // 每页中显示5条数据
         showTotal: total => `共有 ${total} 条数据` // 分页中显示总的数据
       },
       pageOption: {
@@ -120,7 +134,14 @@ export default {
     ok () {
       console.log('点击确定')
     },
+    // 编辑元素
+    handleEdit (bannerId) {
+      console.log(bannerId)
+      this.$refs.createModal.edit(bannerId)
+    },
+    // 删除元素
     async handleDel (bannerId) {
+      this.tableLoading = true
       const data = {
         'bannerId': bannerId
       }
@@ -138,9 +159,9 @@ export default {
     },
     // 获取轮播图列表
     async slideList () {
-      this.tableLoading = true
       // const key = 'updatable'
       // this.$message.loading({ content: '加载中...', key })
+      this.tableLoading = true
       const config = {
         data: this.pageOption
       }

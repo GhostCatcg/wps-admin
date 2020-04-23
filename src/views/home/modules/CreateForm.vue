@@ -41,25 +41,30 @@
           <a-input-number
             id="inputNumber"
             :min="1"
-            v-model="sort"
             v-decorator="['sort', {rules: [{required: true, message: '请输入轮播图的顺序'}]}]"
-            @change="onChange"
-          />
-        </a-form-item>
-        <a-form-item label="所属页面" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-select defaultValue="index" style="width: 120px" @change="handleChange">
-            <a-select-option value="index">首页</a-select-option>
-            <a-select-option value="community">社区</a-select-option>
-          </a-select>
-        </a-form-item>
-        <a-form-item label="图片名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input
-            v-decorator="['desc', {rules: [{required: true, min: 3, message: '请输入至少三个字符的规则描述！'}]}]"
           />
         </a-form-item>
 
+        <a-form-item label="所属页面" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-select
+            defaultValue="index"
+            style="width: 120px"
+            v-decorator="['belong', {rules: [{required: true}]}]"
+          >
+            <a-select-option value="10">首页</a-select-option>
+            <a-select-option value="20">社区</a-select-option>
+          </a-select>
+        </a-form-item>
+
+        <a-form-item label="图片名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="['name', {rules: [{required: true,message: '请输入图片名称'}]}]" />
+        </a-form-item>
+
         <a-form-item label="图片内容" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input v-model="form.desc" type="textarea" />
+          <a-input
+            type="textarea"
+            v-decorator="['content', {rules: [{required: true,message: '请输入图片内容'}]}]"
+          />
         </a-form-item>
 
         <a-form-item label="选择图片" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -70,9 +75,10 @@
             :showUploadList="false"
             :beforeUpload="beforeUpload"
             :customRequest="customUpload"
+            v-decorator="['slide', {rules: [{required: true, message: '请上传图片'}]}]"
             @change="handleChange"
           >
-            <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
+            <img v-if="imageUrl" :src="imageUrl" alt="slide" />
             <div v-else>
               <a-icon :type="loading ? 'loading' : 'plus'" />
               <div class="ant-upload-text">Upload</div>
@@ -86,7 +92,7 @@
 
 <script>
 import { uploadImg } from '@/api/public'
-import { createSlideShow } from '@/api/home'
+import { createSlideShow, detailSlideShow } from '@/api/home'
 function getBase64 (img, callback) {
   const reader = new FileReader()
   reader.addEventListener('load', () => callback(reader.result))
@@ -113,42 +119,72 @@ export default {
     }
   },
   methods: {
+    // 点击新建弹出来的框
     add () {
       this.visible = true
     },
-    handleCancel () {
-      this.visible = false
+    // 点击编辑弹出来的框
+    edit (bannerId) {
+      this.visible = true
+      this.getBanner(bannerId)
     },
-    async handleSubmit () {
-      const formdata = new FormData()
-      formdata.append('file', this.file.file)
-      this.confirmLoading = true
-      const res = await uploadImg(formdata)
+    // 获取轮播图详情
+    async getBanner (bannerId) {
+      const config = {
+        bannerId
+      }
+      const res = await detailSlideShow(config)
       if (res.code === 0) {
-        // 上传完图片之后需要 需要再次上传拿到的key
-        const keyConfig = {
-          data: {
-            type: 10, // 所属类型 10是首页的轮播图
-            name: 'name', // 名称
-            content: 'content', // 内容
-            pic: res.data.data.key, // 图片key
-            sort: 1 // 代表
-          }
-        }
-        const result = await createSlideShow(keyConfig.data)
-        if (result.code === 0) {
-          this.confirmLoading = false
-          this.loading = false
-          this.visible = false
-          this.$emit('refresh')
-        }
+        console.log(res)
       }
     },
+    // 关闭按钮
+    handleCancel () {
+      this.visible = false
+      this.form.resetFields() // 清空表单
+      this.imageUrl = ''
+    },
+    async handleSubmit (e) {
+      this.form.validateFields(async (err, values) => {
+        if (!err) {
+          const formdata = new FormData()
+          formdata.append('file', this.file.file)
+          // formdata.append('file', values.slide.file)
+          this.confirmLoading = true
+          const res = await uploadImg(formdata)
+          if (res.code === 0) {
+            // 上传完图片之后需要 需要再次上传拿到的key
+            const keyConfig = {
+              data: {
+                type: values.belong, // 所属类型 10是首页的轮播图
+                name: values.name, // 名称
+                content: values.content, // 内容
+                pic: res.data.data.key, // 图片key
+                sort: values.sort // 排序
+              }
+            }
+            const result = await createSlideShow(keyConfig.data)
+            if (result.code === 0) {
+              this.confirmLoading = false
+              this.loading = false
+              this.visible = false
+              this.$emit('refresh') // 重新获取列表
+              this.imageUrl = ''
+              this.form.resetFields()
+            }
+          }
+        } else {
+          console.log('有些东西没填写')
+        }
+      })
+    },
+    // 文件上传被修改
     handleChange (info) {
       if (info.file.status === 'uploading') {
         this.loading = true
       }
     },
+    // 图片上传的一个检索，大于2M不予上传
     beforeUpload (file) {
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isLt2M) {

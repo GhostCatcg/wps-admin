@@ -18,7 +18,7 @@
             type="error"
             showIcon
             style="margin-bottom: 24px;"
-            message="用户名或密码错误"
+            :message="isLoginText"
           />
           <a-form-item>
             <a-input
@@ -148,6 +148,7 @@ export default {
       // login type: 0 email, 1 username, 2 telephone
       loginType: 0,
       isLoginError: false,
+      isLoginText: '用户名或密码错误',
       requiredTwoStepCaptcha: false,
       stepCaptchaVisible: false,
       form: this.$form.createForm(this),
@@ -284,12 +285,13 @@ export default {
     // 拦截到错误
     requestFailed (err) {
       console.log(err)
-      this.isLoginError = true
-      this.$notification.error({
-        message: '错误',
-        description: '用户名或者密码错误',
-        duration: 4
-      })
+      // this.isLoginText
+      // this.isLoginError = true
+      // this.$notification.error({
+      //   message: '错误',
+      //   description: '用户名或者密码错误',
+      //   duration: 4
+      // })
     }
   }
 }

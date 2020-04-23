@@ -3,10 +3,10 @@ import { axios } from '@/utils/request'
 const api = {
   create: '/pc/banner/create',
   delete: '/pc/banner/delete',
-  update: '/pc/part/update',
-  upload: '/pc/upload/upload',
+  update: '/pc/banner/update',
   list: '/pc/banner/list',
-  detail: '/pc/banner/detail'
+  detail: '/pc/banner/detail',
+  btList: '/pc/select/bannerTypeList'
 }
 //  创建轮播图  post
 // 	"type":10,  所属类型
@@ -30,22 +30,18 @@ export function delSlideShow (parameter) {
     data: parameter
   })
 }
+// 3、修改轮播图  post
+// 	"bannerId":1,    主键ID
+// 	"type":10,
+// 	"name":"name1",
+// 	"content":"content1",
+// 	"pic":"719713e52cc346078e0d640b7c135fd3.jpg",
+// 	"sort":1
 export function updateSlideShow (parameter) {
   return axios({
     url: api.update,
     method: 'post',
     data: parameter
-  })
-}
-// 上传图片：  post
-export function uploadSlideShow (parameter) {
-  return axios({
-    url: api.upload,
-    method: 'post',
-    data: parameter,
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
   })
 }
 // 列表
@@ -58,11 +54,8 @@ export function listSlideShow (parameter) {
     data: parameter
   })
 }
-// 详情
-
 // 轮播图详情
-// http://49.235.146.76:8020/pc/banner/detail
-// 	"bannerId":"1"
+// "bannerId":"1"
 export function detailSlideShow ({ parameter }) {
   return axios({
     url: api.detail,
@@ -72,15 +65,10 @@ export function detailSlideShow ({ parameter }) {
 }
 
 // 1、banner类型下拉  post
-// http://49.235.146.76:8020/pc/select/bannerTypeList
-// {
-// }
-// 3、修改轮播图  post
-// http://49.235.146.76:8020/pc/banner/update
-// {
-// 	"bannerId":1,    主键ID
-// 	"type":10,
-// 	"name":"name1",
-// 	"content":"content1",
-// 	"pic":"719713e52cc346078e0d640b7c135fd3.jpg",
-// 	"sort":1
+export function bannerTypeList ({ parameter }) {
+  return axios({
+    url: api.btList,
+    method: 'post',
+    data: parameter
+  })
+}
