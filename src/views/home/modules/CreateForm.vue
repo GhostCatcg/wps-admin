@@ -119,16 +119,22 @@ export default {
     }
   },
   methods: {
-    // 点击新建弹出来的框
+    /**
+     * 点击新建弹出来的框
+     */
     add () {
       this.visible = true
     },
-    // 点击编辑弹出来的框
+    /**
+     * 点击编辑弹出来的框
+     */
     edit (bannerId) {
       this.visible = true
       this.getBanner(bannerId)
     },
-    // 获取轮播图详情
+    /**
+     * 获取轮播图详情
+     */
     async getBanner (bannerId) {
       const config = {
         bannerId
@@ -138,7 +144,9 @@ export default {
         console.log(res)
       }
     },
-    // 关闭按钮
+    /**
+     * 关闭按钮
+     */
     handleCancel () {
       this.visible = false
       this.form.resetFields() // 清空表单

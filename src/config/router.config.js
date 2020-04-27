@@ -32,41 +32,67 @@ export const asyncRouterMap = [
             meta: { title: '金刚图', keepAlive: true, permission: [ 'table' ] }
           }
         ]
-      },
-      // 系统设置
-      {
-        path: 'system',
-        name: 'system',
-        redirect: '/system/basic',
-        component: RouteView,
-        meta: { title: '系统设置', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
-        children: [
-          {
-            path: 'analysis/:pageNo([1-9]\\d*)?',
-            name: 'Analysis',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '用户管理', keepAlive: false, permission: [ 'dashboard' ] }
-          },
-          // 外部链接
-          {
-            path: 'https://www.baidu.com/',
-            name: 'Monitor',
-            meta: { title: '角色管理', target: '_blank' }
-          },
-          {
-            path: 'workplace',
-            name: 'Workplace',
-            component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: '权限管理', keepAlive: true, permission: [ 'dashboard' ] }
-          },
-          {
-            path: 'test-work',
-            name: 'TestWork',
-            component: () => import('@/views/dashboard/TestWork'),
-            meta: { title: '资源配置', keepAlive: true, permission: [ 'dashboard' ] }
-          }
-        ]
       }
+      // {
+      //   path: 'idea',
+      //   name: 'idea',
+      //   redirect: 'idea/',
+      //   component: RouteView,
+      //   meta: { title: '奇思妙想', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+      //   children: [
+      //     {
+      //       path: 'idea/:pageNo([1-9]\\d*)?',
+      //       name: 'idea',
+      //       component: () => import('@/views/dashboard/Analysis'),
+      //       meta: { title: '用户管理', keepAlive: false, permission: [ 'dashboard' ] }
+      //     }
+      //   ]
+      // },
+      // {
+      //   path: 'idea',
+      //   name: 'idea',
+      //   redirect: 'idea/',
+      //   component: RouteView,
+      //   meta: { title: '匿名吐槽', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+      //   children: [
+      //     {
+      //       path: 'idea/:pageNo([1-9]\\d*)?',
+      //       name: 'idea',
+      //       component: () => import('@/views/dashboard/Analysis'),
+      //       meta: { title: '用户管理', keepAlive: false, permission: [ 'dashboard' ] }
+      //     }
+      //   ]
+      // },
+      // {
+      //   path: 'idea',
+      //   name: 'idea',
+      //   redirect: 'idea/',
+      //   component: RouteView,
+      //   meta: { title: '外包消息', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+      //   children: [
+      //     {
+      //       path: 'idea/:pageNo([1-9]\\d*)?',
+      //       name: 'idea',
+      //       component: () => import('@/views/dashboard/Analysis'),
+      //       meta: { title: '用户管理', keepAlive: false, permission: [ 'dashboard' ] }
+      //     }
+      //   ]
+      // },
+      // {
+      //   path: 'idea',
+      //   name: 'idea',
+      //   redirect: 'idea/',
+      //   component: RouteView,
+      //   meta: { title: '外包消息', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+      //   children: [
+      //     {
+      //       path: 'idea/:pageNo([1-9]\\d*)?',
+      //       name: 'idea',
+      //       component: () => import('@/views/dashboard/Analysis'),
+      //       meta: { title: '用户管理', keepAlive: false, permission: [ 'dashboard' ] }
+      //     }
+      //   ]
+      // }
       // dashboard
       // {
       //   path: 'dashboard',
@@ -102,6 +128,40 @@ export const asyncRouterMap = [
       //   ]
       // },
 
+      // 系统设置
+      // {
+      //   path: 'system',
+      //   name: 'system',
+      //   redirect: '/system/basic',
+      //   component: RouteView,
+      //   meta: { title: '系统设置', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+      //   children: [
+      //     {
+      //       path: 'analysis/:pageNo([1-9]\\d*)?',
+      //       name: 'Analysis',
+      //       component: () => import('@/views/dashboard/Analysis'),
+      //       meta: { title: '用户管理', keepAlive: false, permission: [ 'dashboard' ] }
+      //     },
+      //     // 外部链接
+      //     {
+      //       path: 'https://www.baidu.com/',
+      //       name: 'Monitor',
+      //       meta: { title: '角色管理', target: '_blank' }
+      //     },
+      //     {
+      //       path: 'workplace',
+      //       name: 'Workplace',
+      //       component: () => import('@/views/dashboard/Workplace'),
+      //       meta: { title: '权限管理', keepAlive: true, permission: [ 'dashboard' ] }
+      //     },
+      //     {
+      //       path: 'test-work',
+      //       name: 'TestWork',
+      //       component: () => import('@/views/dashboard/TestWork'),
+      //       meta: { title: '资源配置', keepAlive: true, permission: [ 'dashboard' ] }
+      //     }
+      //   ]
+      // },
       // forms
       // {
       //   path: '/form',

@@ -137,7 +137,13 @@ export default {
     // 编辑元素
     handleEdit (bannerId) {
       console.log(bannerId)
-      this.$refs.createModal.edit(bannerId)
+      this.$notification.open({
+        message: '正在抓紧开发中...',
+        description:
+          '先去玩把英雄联盟再来吧！',
+        icon: <a-icon type="smile" style="color: #108ee9" />
+      })
+      // this.$refs.createModal.edit(bannerId)
     },
     // 删除元素
     async handleDel (bannerId) {
