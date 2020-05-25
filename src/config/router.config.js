@@ -23,76 +23,136 @@ export const asyncRouterMap = [
             path: '/home/slideshow',
             name: 'slideshow',
             component: () => import('@/views/home/SlideShow'),
-            meta: { title: '轮播图', keepAlive: false, permission: [ 'table' ] }
-          },
+            meta: { title: '轮播图', keepAlive: true, permission: [ 'table' ] }
+          }
+          // {
+          //   path: '/home/diamond',
+          //   name: 'diamond',
+          //   component: () => import('@/views/home/Diamond'),
+          //   meta: { title: '金刚图', keepAlive: true, permission: [ 'table' ] }
+          // }
+        ]
+      },
+      {
+        path: 'blackHouse',
+        name: 'blackHouse',
+        redirect: 'blackHouse/list',
+        component: RouteView,
+        meta: { title: '小黑屋', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        children: [
           {
-            path: '/home/diamond',
-            name: 'diamond',
-            component: () => import('@/views/home/Diamond'),
-            meta: { title: '金刚图', keepAlive: true, permission: [ 'table' ] }
+            path: 'list/:pageNo([1-9]\\d*)?',
+            name: 'blackList',
+            component: () => import('@/views/blackHouse/list'),
+            meta: { title: '小黑屋', keepAlive: true, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
+      {
+        path: 'idea',
+        name: 'idea',
+        redirect: 'idea/list',
+        component: RouteView,
+        meta: { title: '奇思妙想', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        children: [
+          {
+            path: 'list/:pageNo([1-9]\\d*)?',
+            name: 'ideaList',
+            component: () => import('@/views/idea/list'),
+            meta: { title: '奇思妙想', keepAlive: true, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
+      {
+        path: 'complaining',
+        name: 'complaining',
+        redirect: 'complaining/list',
+        component: RouteView,
+        meta: { title: '匿名吐槽', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        children: [
+          {
+            path: 'list/:pageNo([1-9]\\d*)?',
+            name: 'list',
+            component: () => import('@/views/complaining/list'),
+            meta: { title: '匿名吐槽', keepAlive: true, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
+      {
+        path: 'outsourcing',
+        name: 'outsourcing',
+        redirect: 'outsourcing/list',
+        component: RouteView,
+        meta: { title: '外包消息', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        children: [
+          {
+            path: 'list/:pageNo([1-9]\\d*)?',
+            name: 'list',
+            component: () => import('@/views/outsourcing/list'),
+            meta: { title: '外包消息', keepAlive: true, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
+      {
+        path: 'job',
+        name: 'job',
+        redirect: 'job/list',
+        component: RouteView,
+        meta: { title: '职位', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        children: [
+          {
+            path: 'list/:pageNo([1-9]\\d*)?',
+            name: 'jobList',
+            component: () => import('@/views/job/list'),
+            meta: { title: '职位', keepAlive: true, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
+      {
+        path: 'jobSearch',
+        name: 'jobSearch',
+        redirect: 'jobSearch/list',
+        component: RouteView,
+        meta: { title: '求职', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        children: [
+          {
+            path: 'list/:pageNo([1-9]\\d*)?',
+            name: 'jobSearchList',
+            component: () => import('@/views/dashboard/Analysis'),
+            meta: { title: '求职', keepAlive: true, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
+      {
+        path: 'trainee',
+        name: 'trainee',
+        redirect: 'trainee/list',
+        component: RouteView,
+        meta: { title: '练习生', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        children: [
+          {
+            path: 'list/:pageNo([1-9]\\d*)?',
+            name: 'traineeList',
+            component: () => import('@/views/trainee/list'),
+            meta: { title: '练习生', keepAlive: true, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
+      {
+        path: 'gallery',
+        name: 'gallery',
+        redirect: 'gallery/list',
+        component: RouteView,
+        meta: { title: '作品展示', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        children: [
+          {
+            path: 'list/:pageNo([1-9]\\d*)?',
+            name: 'galleryList',
+            component: () => import('@/views/trainee/list'),
+            meta: { title: '作品展示', keepAlive: true, permission: [ 'dashboard' ] }
           }
         ]
       }
-      // {
-      //   path: 'idea',
-      //   name: 'idea',
-      //   redirect: 'idea/',
-      //   component: RouteView,
-      //   meta: { title: '奇思妙想', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
-      //   children: [
-      //     {
-      //       path: 'idea/:pageNo([1-9]\\d*)?',
-      //       name: 'idea',
-      //       component: () => import('@/views/dashboard/Analysis'),
-      //       meta: { title: '用户管理', keepAlive: false, permission: [ 'dashboard' ] }
-      //     }
-      //   ]
-      // },
-      // {
-      //   path: 'idea',
-      //   name: 'idea',
-      //   redirect: 'idea/',
-      //   component: RouteView,
-      //   meta: { title: '匿名吐槽', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
-      //   children: [
-      //     {
-      //       path: 'idea/:pageNo([1-9]\\d*)?',
-      //       name: 'idea',
-      //       component: () => import('@/views/dashboard/Analysis'),
-      //       meta: { title: '用户管理', keepAlive: false, permission: [ 'dashboard' ] }
-      //     }
-      //   ]
-      // },
-      // {
-      //   path: 'idea',
-      //   name: 'idea',
-      //   redirect: 'idea/',
-      //   component: RouteView,
-      //   meta: { title: '外包消息', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
-      //   children: [
-      //     {
-      //       path: 'idea/:pageNo([1-9]\\d*)?',
-      //       name: 'idea',
-      //       component: () => import('@/views/dashboard/Analysis'),
-      //       meta: { title: '用户管理', keepAlive: false, permission: [ 'dashboard' ] }
-      //     }
-      //   ]
-      // },
-      // {
-      //   path: 'idea',
-      //   name: 'idea',
-      //   redirect: 'idea/',
-      //   component: RouteView,
-      //   meta: { title: '外包消息', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
-      //   children: [
-      //     {
-      //       path: 'idea/:pageNo([1-9]\\d*)?',
-      //       name: 'idea',
-      //       component: () => import('@/views/dashboard/Analysis'),
-      //       meta: { title: '用户管理', keepAlive: false, permission: [ 'dashboard' ] }
-      //     }
-      //   ]
-      // }
       // dashboard
       // {
       //   path: 'dashboard',
@@ -126,7 +186,7 @@ export const asyncRouterMap = [
       //       meta: { title: '测试功能', keepAlive: true, permission: [ 'dashboard' ] }
       //     }
       //   ]
-      // },
+      // }
 
       // 系统设置
       // {

@@ -1,0 +1,137 @@
+职位PC端接口：
+职位 PC端接口： 
+1、创建职位  post
+http://121.199.36.7:8020/pc/job/create
+{
+ "title":"职位1",                            标题
+ "company": "公司1",   // 公司
+ "station": "",   // 岗位
+ "treatment": "",   // 待遇
+ "address": "",   // 地址
+ "phone":"13100002222",                          电话
+ "pic":["cc342d24fbbe4ea59fa910912ec9747e.jpg","50a92d494a764d11af959931960b05a3.jpg"],   文件key  支持多个
+ "sort":1  
+}
+
+2、修改职位  post
+http://121.199.36.7:8020/pc/job/update
+{
+ "jobId":2,                    职位ID
+ "title":"职位2",
+ 
+ "phone":"13100002222",                          电话
+ "pic":["50a92d494a764d11af959931960b05a3.jpg"],
+ "sort":1
+}
+
+3、删除职位  post
+http://121.199.36.7:8020/pc/job/delete
+{
+ "jobId":3
+}
+
+4、职位列表  post
+http://121.199.36.7:8020/pc/job/list
+{
+ "title":"",
+ "pageNum":1,
+ "pageSize":20
+ 
+}
+
+5、职位详情  post
+http://121.199.36.7:8020/pc/job/detail
+{
+ "jobId":"2"
+}
+6、 点赞职位 post
+http: //121.199.36.7:8020/pc/job/thumb
+  {
+    "jobId": 1
+  }
+
+7、 收藏职位 post
+http: //121.199.36.7:8020/pc/job/collect
+  {
+    "jobId": 1
+  }
+
+8、 转发职位 post
+http: //121.199.36.7:8020/pc/job/forward
+  {
+    "jobId": 1
+  }
+
+9、 取消点赞职位 post
+http: //121.199.36.7:8020/pc/job/delThumb
+  {
+    "jobId": 1
+  }
+
+10、 取消收藏职位 post
+http: //121.199.36.7:8020/pc/job/delCollect
+  {
+    "jobId": 1
+  }
+
+11、 取消转发职位 post
+http: //121.199.36.7:8020/pc/job/delForward
+  {
+    "jobId": 1
+  }
+
+12、 评论职位 post
+http: //121.199.36.7:8020/pc/job/topic
+  {
+    "jobId": 2,
+    "parent": 0,
+    "content": "不在"
+  }
+
+13、 获取评论 post
+http: //121.199.36.7:8020/pc/job/listTopicTree
+  {
+    "jobId": 1
+  }
+
+14、 删除评论 post
+http: //121.199.36.7:8020/pc/job/delTopic
+  {
+    "jobTopicId": 5
+  }
+
+
+
+
+{
+  "commonArea": null,
+  "commonAreaName": null,
+  "jobId": 1, // 职位ID
+  "title": "职位1", // 标题
+  "company": "公司1", // 公司
+  "station": "", // 岗位
+  "treatment": "", // 待遇
+  "address": "", // 地址
+  "phone": "13100002222", // 电话
+  "pic": [
+    "11",
+    "12"
+  ], //  图片key 列表
+  "urlList": [
+    "http://121.199.36.7:8020/pc/wpsFile/11",
+    "http://121.199.36.7:8020/pc/wpsFile/12"
+  ], // url 列表
+  "area": 10,
+  "sort": 1,
+  "creator": "朱闪烁",
+  "creatorId": 8,
+  "createTime": 1588821946000,
+  "modifier": null,
+  "modifierId": null,
+  "modifyTime": null,
+  "thumbNum": 0, // 总点赞数
+  "collectNum": 0, // 总收藏数
+  "forwardNum": 1, // 总转发数
+  "topicNum": 1, // 总评论数
+  "thumbSelfNum": 0, // 本人点赞数
+  "collectS

@@ -5,11 +5,11 @@
         <div class="header">
           <a href="/">
             <img src="~@/assets/logo.svg" class="logo" alt="logo">
-            <!-- <span class="title">顽 皮 斯</span> -->
+            <span class="title">顽 皮 斯</span>
           </a>
         </div>
         <div class="desc">
-          Solng
+          影视CG服务
         </div>
       </div>
 
