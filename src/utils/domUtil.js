@@ -16,4 +16,6 @@ export const setDocumentTitle = function (title) {
   }
 }
 
-export const domTitle = 'wps'
+// 浏览器 Title 后缀
+
+export const domTitle = 'WPS'

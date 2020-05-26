@@ -1,0 +1,10 @@
+.table-operator {
+  margin-bottom: 20px;
+  display: flex;
+  position: relative;
+  height:32px;
+  &>.ant-btn.ant-btn-primary{
+    position: absolute;
+    right:0;
+  }
+}

@@ -6,7 +6,7 @@
 * Description: 轮播图配置
 *
 */
-<style lang="scss">
+<style lang="scss" scoped>
 .slide-wapper {
   th,
   td {
