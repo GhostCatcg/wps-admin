@@ -4,12 +4,12 @@
 * Author: GhostCat
 * CreatDate: 2020-04-20 17:50:40
 *
-* Description: 创建黑名单
+* Description: 新增奇思妙想
 *
 */
 <template>
   <a-modal
-    title="新增黑名单"
+    title="新增奇思妙想"
     :width="640"
     :visible="visible"
     :confirmLoading="confirmLoading"
@@ -23,11 +23,11 @@
             id="inputNumber"
             option.initialValue="1"
             :min="1"
-            v-decorator="['sort', {rules: [{required: true, message: '请输入黑名单顺序'}]}]"
+            v-decorator="['sort', {rules: [{required: true, message: '请输入顺序'}]}]"
           />
         </a-form-item>
         <a-form-item label="标题" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input v-decorator="['name', {rules: [{required: true,message: '请输入标题'}]}]" />
+          <a-input v-decorator="['title', {rules: [{required: true,message: '请输入标题'}]}]" />
         </a-form-item>
 
         <a-form-item label="内容" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -62,7 +62,7 @@
 
 <script>
 import { uploadImg } from '@/api/public'
-import { createBlackList, detailSlideShow } from '@/api/black'
+import { createBlackList, detailSlideShow } from '@/api/idea'
 function getBase64 (img, callback) {
   const reader = new FileReader()
   reader.addEventListener('load', () => callback(reader.result))
@@ -123,22 +123,23 @@ export default {
       this.imageUrl = ''
     },
     async handleSubmit (e) {
+      console.log(this.form)
       this.form.validateFields(async (err, values) => {
         if (!err) {
           const formdata = new FormData()
           formdata.append('file', this.file.file)
-          // formdata.append('file', values.slide.file)
           this.confirmLoading = true
           const res = await uploadImg(formdata) // 上传图片
-          console.log('表单数据')
+          console.log('表单数据', res)
           console.log(values, '\n', res.data)
           if (res.code === 0) {
             // 上传完图片之后需要 需要再次上传拿到的key
+            console.log('图片上传成功')
             const keyConfig = {
               data: {
                 title: values.title, // 黑名单标题
                 content: values.content, // 内容
-                pic: res.data.data.key, // 图片key
+                pic: [res.data.data.key], // 图片key
                 sort: values.sort // 排序
               }
             }

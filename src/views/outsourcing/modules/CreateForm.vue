@@ -4,12 +4,12 @@
 * Author: GhostCat
 * CreatDate: 2020-04-20 17:50:40
 *
-* Description: 新增匿名吐槽
+* Description: 新增外包消息
 *
 */
 <template>
   <a-modal
-    title="新增匿名吐槽"
+    title="新增外包消息"
     :width="640"
     :visible="visible"
     :confirmLoading="confirmLoading"
@@ -62,7 +62,7 @@
 
 <script>
 import { uploadImg } from '@/api/public'
-import { createBlackList, detailSlideShow } from '@/api/complaining'
+import { createBlackList, detailSlideShow } from '@/api/outsourcing'
 function getBase64 (img, callback) {
   const reader = new FileReader()
   reader.addEventListener('load', () => callback(reader.result))
@@ -138,7 +138,7 @@ export default {
             const keyConfig = {
               data: {
                 title: values.title, // 黑名单标题
-                content: values.content, // 内容
+                requirement: values.content, // 内容
                 pic: [res.data.data.key], // 图片key
                 sort: values.sort // 排序
               }

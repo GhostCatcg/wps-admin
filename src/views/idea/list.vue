@@ -11,18 +11,173 @@
   height:100%;
 }
 </style>
+
+<style lang='scss' scoped type='text/scss'>
+.list-wapper {
+  height: 100%;
+}
+</style>
 <template>
-  <div class="list-wapper">
-    <h1>奇思妙想</h1>
-  </div>
+  <a-card :bordered="false" class="slide-wapper">
+    <div class="table-operator">
+      <a-input-search
+        v-show="false"
+        placeholder="请输入关键字"
+        enter-button
+        style="width: 200px;"
+        :loading="searchLoadFlag"
+        @search="onSearch"
+      />
+      <a-button type="primary" icon="plus" @click="$refs.createModal.add()">新建</a-button>
+    </div>
+    <a-table
+      bordered
+      :dataSource="dataList"
+      :columns="columns"
+      :pagination="pagination"
+      :loading="tableLoading"
+      @change="tableChange"
+    >
+      <!-- <div class="slide-photo" slot="url" slot-scope="text">
+        <img :src="text" alt />
+      </div>-->
+      <span slot="action" slot-scope="text, record">
+        <a @click="handleEdit(record.ideaId)">编辑</a>
+        <a-divider type="vertical" />
+        <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.ideaId)">
+          <a>删除</a>
+        </a-popconfirm>
+      </span>
+    </a-table>
+    <create-form ref="createModal" @refresh="getBlackList" />
+  </a-card>
 </template>
 
 <script>
+import CreateForm from './modules/CreateForm'
+import { createSlideShow, updateSlideShow, getList, delSlideShow } from '@/api/idea'
 export default {
-  name: 'ideaList',
-  components: {},
-  props: {},
-  methods: {},
-  watch: {}
+  name: 'IdeaList',
+  components: {
+    CreateForm
+  },
+  data () {
+    return {
+      // 表头
+      columns: [
+        {
+          dataIndex: 'ideaId', // 和数据匹配
+          key: 'id',
+          title: 'ID',
+          scopedSlots: { customRender: 'id' }
+        },
+        {
+          dataIndex: 'title',
+          key: 'type',
+          title: '标题',
+          scopedSlots: { customRender: 'type' }
+        },
+        {
+          dataIndex: 'content',
+          key: 'name',
+          title: '内容',
+          scopedSlots: { customRender: 'name' }
+        },
+        {
+          dataIndex: 'sort',
+          key: 'sort',
+          title: '顺序',
+          width: 100,
+          scopedSlots: { customRender: 'sort' }
+        },
+        {
+          title: '操作',
+          key: 'action',
+          width: 150,
+          scopedSlots: { customRender: 'action' }
+        }
+      ],
+      dataList: [],
+      pagination: {
+        total: 0,
+        pageSize: 5, // 每页中显示5条数据
+        showTotal: total => `共有 ${total} 条数据` // 分页中显示总的数据
+      },
+      pageOption: {
+        pageNum: 1,
+        pageSize: 5
+      },
+      tableLoading: false,
+      searchLoadFlag: false
+    }
+  },
+  created () {
+    this.getBlackList()
+  },
+  methods: {
+    /**
+     * 输入框搜索
+     */
+    onSearch () {
+      console.log('搜索')
+      this.searchLoadFlag = true
+    },
+    createSlide () {
+      console.log('新建')
+      createSlideShow()
+    },
+    updateSlide () {
+      console.log('更新')
+      updateSlideShow()
+    },
+    ok () {
+      console.log('点击确定')
+    },
+    // 编辑元素
+    handleEdit (bannerId) {
+      console.log(bannerId)
+      this.$notification.open({
+        message: '正在抓紧开发中...',
+        description:
+          '先去玩把英雄联盟再来吧！',
+        icon: <a-icon type="smile" style="color: #108ee9" />
+      })
+      // this.$refs.createModal.edit(bannerId)
+    },
+    // 删除元素
+    async handleDel (bannerId) {
+      this.tableLoading = true
+      const data = {
+        'ideaId': bannerId
+      }
+      const res = await delSlideShow(data)
+      if (res.code === 0) {
+        this.$message.success('删除成功')
+        this.getBlackList()
+      }
+    },
+    // 分页、排序、筛选变化时触发
+    tableChange (e) {
+      this.pageOption.pageNum = e.current
+      this.pageOption.pageSize = e.pageSize
+      this.getBlackList()
+    },
+    // 获取黑名单列表
+    async getBlackList () {
+      // const key = 'updatable'
+      // this.$message.loading({ content: '加载中...', key })
+      this.tableLoading = true
+      const config = {
+        data: this.pageOption
+      }
+      const res = await getList(config.data)
+      if (res.code === 0) {
+        this.dataList = res.data.data.items
+        this.pagination.pageSize = res.data.data.pageSize
+        this.pagination.total = res.data.data.total
+        this.tableLoading = false
+      }
+    }
+  }
 }
 </script>

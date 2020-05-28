@@ -72,7 +72,7 @@ export const asyncRouterMap = [
         children: [
           {
             path: 'list/:pageNo([1-9]\\d*)?',
-            name: 'list',
+            name: 'complainingList',
             component: () => import('@/views/complaining/list'),
             meta: { title: '匿名吐槽', keepAlive: true, permission: [ 'dashboard' ] }
           }
@@ -87,7 +87,7 @@ export const asyncRouterMap = [
         children: [
           {
             path: 'list/:pageNo([1-9]\\d*)?',
-            name: 'list',
+            name: 'outsourcingList',
             component: () => import('@/views/outsourcing/list'),
             meta: { title: '外包消息', keepAlive: true, permission: [ 'dashboard' ] }
           }

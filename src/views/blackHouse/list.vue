@@ -14,8 +14,8 @@
 <template>
   <a-card :bordered="false" class="slide-wapper">
     <div class="table-operator">
-        <!-- v-show="false" -->
       <a-input-search
+        v-show="false"
         placeholder="请输入关键字"
         enter-button
         style="width: 200px;"
@@ -51,7 +51,7 @@
 import CreateForm from './modules/CreateForm'
 import { createSlideShow, updateSlideShow, getList, delSlideShow } from '@/api/black'
 export default {
-  name: 'SlideShow',
+  name: 'blackList',
   components: {
     CreateForm
   },
