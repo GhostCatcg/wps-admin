@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import LogoSvg from '@/assets/logo.svg?inline'
+import LogoSvg from '@/assets/logo.png?inline'
 
 export default {
   name: 'Logo',

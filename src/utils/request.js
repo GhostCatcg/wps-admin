@@ -9,7 +9,8 @@ import router from '@/router'
 // 创建 axios 实例
 // console.log('request.js', process.env.VUE_APP_API_BASE_URL)
 const service = axios.create({
-  baseURL: process.env.VUE_APP_API_BASE_URL, // 基础的RUL
+  // baseURL: process.env.VUE_APP_API_BASE_URL, // 基础的RUL
+  baseURL: 'https://cgwps.com', // 基础的RUL 不想重启所以写死一个
   timeout: 6000, // 请求超时时间
   headers: {
     area: 20, // 请求默认区域（公司残留）

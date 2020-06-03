@@ -17,13 +17,13 @@ export const asyncRouterMap = [
         name: 'home',
         redirect: '/home/slideshow',
         component: RouteView, // PageView,
-        meta: { title: '基础配置', keepAlive: true, icon: 'home', permission: [ 'table' ] },
+        meta: { title: '基础配置', keepAlive: true, icon: 'home', permission: ['table'] },
         children: [
           {
             path: '/home/slideshow',
             name: 'slideshow',
             component: () => import('@/views/home/SlideShow'),
-            meta: { title: '轮播图', keepAlive: true, permission: [ 'table' ] }
+            meta: { title: '轮播图', keepAlive: true, permission: ['table'] }
           }
           // {
           //   path: '/home/diamond',
@@ -38,13 +38,13 @@ export const asyncRouterMap = [
         name: 'blackHouse',
         redirect: 'blackHouse/list',
         component: RouteView,
-        meta: { title: '小黑屋', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        meta: { title: '小黑屋', keepAlive: true, icon: 'setting', permission: ['dashboard'] },
         children: [
           {
             path: 'list/:pageNo([1-9]\\d*)?',
             name: 'blackList',
             component: () => import('@/views/blackHouse/list'),
-            meta: { title: '小黑屋', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: '小黑屋', keepAlive: true, permission: ['dashboard'] }
           }
         ]
       },
@@ -53,13 +53,13 @@ export const asyncRouterMap = [
         name: 'idea',
         redirect: 'idea/list',
         component: RouteView,
-        meta: { title: '奇思妙想', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        meta: { title: '奇思妙想', keepAlive: true, icon: 'setting', permission: ['dashboard'] },
         children: [
           {
             path: 'list/:pageNo([1-9]\\d*)?',
             name: 'ideaList',
             component: () => import('@/views/idea/list'),
-            meta: { title: '奇思妙想', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: '奇思妙想', keepAlive: true, permission: ['dashboard'] }
           }
         ]
       },
@@ -68,13 +68,13 @@ export const asyncRouterMap = [
         name: 'complaining',
         redirect: 'complaining/list',
         component: RouteView,
-        meta: { title: '匿名吐槽', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        meta: { title: '匿名吐槽', keepAlive: true, icon: 'setting', permission: ['dashboard'] },
         children: [
           {
             path: 'list/:pageNo([1-9]\\d*)?',
             name: 'complainingList',
             component: () => import('@/views/complaining/list'),
-            meta: { title: '匿名吐槽', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: '匿名吐槽', keepAlive: true, permission: ['dashboard'] }
           }
         ]
       },
@@ -83,13 +83,13 @@ export const asyncRouterMap = [
         name: 'outsourcing',
         redirect: 'outsourcing/list',
         component: RouteView,
-        meta: { title: '外包消息', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        meta: { title: '外包消息', keepAlive: true, icon: 'setting', permission: ['dashboard'] },
         children: [
           {
             path: 'list/:pageNo([1-9]\\d*)?',
             name: 'outsourcingList',
             component: () => import('@/views/outsourcing/list'),
-            meta: { title: '外包消息', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: '外包消息', keepAlive: true, permission: ['dashboard'] }
           }
         ]
       },
@@ -98,13 +98,13 @@ export const asyncRouterMap = [
         name: 'job',
         redirect: 'job/list',
         component: RouteView,
-        meta: { title: '职位', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        meta: { title: '职位', keepAlive: true, icon: 'setting', permission: ['dashboard'] },
         children: [
           {
             path: 'list/:pageNo([1-9]\\d*)?',
             name: 'jobList',
             component: () => import('@/views/job/list'),
-            meta: { title: '职位', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: '职位', keepAlive: true, permission: ['dashboard'] }
           }
         ]
       },
@@ -113,13 +113,13 @@ export const asyncRouterMap = [
         name: 'jobSearch',
         redirect: 'jobSearch/list',
         component: RouteView,
-        meta: { title: '求职', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        meta: { title: '求职', keepAlive: true, icon: 'setting', permission: ['dashboard'] },
         children: [
           {
             path: 'list/:pageNo([1-9]\\d*)?',
             name: 'jobSearchList',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '求职', keepAlive: true, permission: [ 'dashboard' ] }
+            component: () => import('@/views/jobSearch/list'),
+            meta: { title: '求职', keepAlive: true, permission: ['dashboard'] }
           }
         ]
       },
@@ -128,13 +128,13 @@ export const asyncRouterMap = [
         name: 'trainee',
         redirect: 'trainee/list',
         component: RouteView,
-        meta: { title: '练习生', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        meta: { title: '练习生', keepAlive: true, icon: 'setting', permission: ['dashboard'] },
         children: [
           {
             path: 'list/:pageNo([1-9]\\d*)?',
             name: 'traineeList',
             component: () => import('@/views/trainee/list'),
-            meta: { title: '练习生', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: '练习生', keepAlive: true, permission: ['dashboard'] }
           }
         ]
       },
@@ -143,13 +143,13 @@ export const asyncRouterMap = [
         name: 'gallery',
         redirect: 'gallery/list',
         component: RouteView,
-        meta: { title: '作品展示', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        meta: { title: '作品展示', keepAlive: true, icon: 'setting', permission: ['dashboard'] },
         children: [
           {
             path: 'list/:pageNo([1-9]\\d*)?',
             name: 'galleryList',
             component: () => import('@/views/trainee/list'),
-            meta: { title: '作品展示', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: '作品展示', keepAlive: true, permission: ['dashboard'] }
           }
         ]
       }

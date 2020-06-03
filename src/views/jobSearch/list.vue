@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: 'list',
+  name: 'jobSearchList',
   components: {},
   props: {},
   methods: {},
