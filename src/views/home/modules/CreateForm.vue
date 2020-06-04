@@ -7,25 +7,6 @@
 * Description: 添加轮播图
 *
 */
-<style lang="scss">
-.avatar-uploader > .ant-upload {
-  width: 200px;
-  height: 128px;
-  img {
-    width: 100%;
-    object-fit: contain;
-  }
-}
-.ant-upload-select-picture-card i {
-  font-size: 32px;
-  color: #999;
-}
-
-.ant-upload-select-picture-card .ant-upload-text {
-  margin-top: 8px;
-  color: #666;
-}
-</style>
 <template>
   <a-modal
     title="新增轮播图"
@@ -130,16 +111,19 @@ export default {
      */
     edit (bannerId) {
       this.visible = true
+      console.log('修改轮播图的id', bannerId)
       this.getBanner(bannerId)
     },
     /**
      * 获取轮播图详情
      */
-    async getBanner (bannerId) {
+    async getBanner (id) {
       const config = {
-        bannerId
+        data: {
+          bannerId: id
+        }
       }
-      const res = await detailSlideShow(config)
+      const res = await detailSlideShow(config.data)
       if (res.code === 0) {
         console.log(res)
       }
@@ -212,3 +196,23 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.avatar-uploader > .ant-upload {
+  width: 200px;
+  height: 128px;
+  img {
+    width: 100%;
+    object-fit: contain;
+  }
+}
+.ant-upload-select-picture-card i {
+  font-size: 32px;
+  color: #999;
+}
+
+.ant-upload-select-picture-card .ant-upload-text {
+  margin-top: 8px;
+  color: #666;
+}
+</style>

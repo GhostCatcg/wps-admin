@@ -6,28 +6,6 @@
 * Description: 轮播图配置
 *
 */
-<style lang="scss" scoped>
-.slide-wapper {
-  th,
-  td {
-    text-align: center !important;
-  }
-  .slide-photo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    img {
-      height: 60px;
-      object-fit: contain;
-    }
-  }
-  .table-operator {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: flex-end;
-  }
-}
-</style>
 <template>
   <a-card :bordered="false" class="slide-wapper">
     <div class="table-operator">
@@ -137,13 +115,13 @@ export default {
     // 编辑元素
     handleEdit (bannerId) {
       console.log(bannerId)
-      this.$notification.open({
-        message: '正在抓紧开发中...',
-        description:
-          '先去玩把英雄联盟再来吧！',
-        icon: <a-icon type="smile" style="color: #108ee9" />
-      })
-      // this.$refs.createModal.edit(bannerId)
+      // this.$notification.open({
+      //   message: '正在抓紧开发中...',
+      //   description:
+      //     '先去玩把英雄联盟再来吧！',
+      //   icon: <a-icon type="smile" style="color: #108ee9" />
+      // })
+      this.$refs.createModal.edit(bannerId)
     },
     // 删除元素
     async handleDel (bannerId) {
@@ -183,3 +161,26 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.slide-wapper {
+  th,
+  td {
+    text-align: center !important;
+  }
+  .slide-photo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      height: 60px;
+      object-fit: contain;
+    }
+  }
+  .table-operator {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+</style>

@@ -56,7 +56,7 @@ export function listSlideShow (parameter) {
 }
 // 轮播图详情
 // "bannerId":"1"
-export function detailSlideShow ({ parameter }) {
+export function detailSlideShow (parameter) {
   return axios({
     url: api.detail,
     method: 'post',

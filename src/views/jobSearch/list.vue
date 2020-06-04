@@ -13,7 +13,7 @@
 </style>
 <template>
   <div class="list-wapper">
-    <h1>求职</h1>
+    <h1>正在开发中</h1>
   </div>
 </template>
 
