@@ -11,7 +11,6 @@
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="$refs.createModal.add()">新建</a-button>
     </div>
-
     <a-table
       bordered
       :columns="columns"
@@ -25,9 +24,11 @@
       <div class="slide-photo" slot="url" slot-scope="text">
         <img :src="text" alt />
       </div>
+      <span slot="createTime" slot-scope="text">{{ convertTime(text) }}</span>
+
       <span slot="action" slot-scope="text, record">
-        <a @click="handleEdit(record.bannerId)">编辑</a>
-        <a-divider type="vertical" />
+        <!-- <a @click="handleEdit(record.bannerId)">编辑</a>
+        <a-divider type="vertical" />-->
         <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.bannerId)">
           <a>删除</a>
         </a-popconfirm>
@@ -39,16 +40,19 @@
       </span>
     </a-table>
     <create-form ref="createModal" @refresh="slideList" />
+    <edit-form ref="editModal" @refresh="slideList" />
   </a-card>
 </template>
 
 <script>
 import CreateForm from './modules/CreateForm'
-import { createSlideShow, updateSlideShow, listSlideShow, delSlideShow } from '@/api/home'
+import EditForm from './modules/EditForm'
+import { listSlideShow, delSlideShow } from '@/api/home'
 export default {
   name: 'SlideShow',
   components: {
-    CreateForm
+    CreateForm,
+    EditForm
   },
   data () {
     return {
@@ -79,6 +83,20 @@ export default {
           scopedSlots: { customRender: 'url' }
         },
         {
+          dataIndex: 'createTime',
+          key: 'createTime',
+          title: '创建时间',
+          width: 200,
+          scopedSlots: { customRender: 'createTime' }
+        },
+        {
+          dataIndex: 'creator',
+          key: 'creator',
+          title: '创建人',
+          width: 100,
+          scopedSlots: { customRender: 'creator' }
+        },
+        {
           title: '操作',
           key: 'action',
           scopedSlots: { customRender: 'action' }
@@ -101,18 +119,14 @@ export default {
     this.slideList()
   },
   methods: {
-    createSlide () {
-      console.log('新建')
-      createSlideShow()
+    /**
+     * 时间戳转换为时间
+     */
+    convertTime (time) {
+      var date = new Date(time + 8 * 3600 * 1000) // 增加8小时
+      return date.toJSON().substr(0, 19).replace('T', ' ')
     },
-    updateSlide () {
-      console.log('更新')
-      updateSlideShow()
-    },
-    ok () {
-      console.log('点击确定')
-    },
-    // 编辑元素
+    // 编辑轮播图
     handleEdit (bannerId) {
       console.log(bannerId)
       // this.$notification.open({
@@ -121,7 +135,7 @@ export default {
       //     '先去玩把英雄联盟再来吧！',
       //   icon: <a-icon type="smile" style="color: #108ee9" />
       // })
-      this.$refs.createModal.edit(bannerId)
+      this.$refs.editModal.edit(bannerId)
     },
     // 删除元素
     async handleDel (bannerId) {

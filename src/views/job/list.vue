@@ -8,7 +8,7 @@
 */
 <style lang='scss' scoped type='text/scss'>
 .list-wapper {
-  height:100%;
+  height: 100%;
 }
 </style>
 <template>
@@ -32,12 +32,10 @@
       :loading="tableLoading"
       @change="tableChange"
     >
-      <!-- <div class="slide-photo" slot="url" slot-scope="text">
-        <img :src="text" alt />
-      </div>-->
+      <span slot="createTime" slot-scope="text">{{ convertTime(text) }}</span>
       <span slot="action" slot-scope="text, record">
-        <a @click="handleEdit(record.jobId)">编辑</a>
-        <a-divider type="vertical" />
+        <!-- <a @click="handleEdit(record.jobId)">编辑</a>
+        <a-divider type="vertical" />-->
         <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.jobId)">
           <a>删除</a>
         </a-popconfirm>
@@ -49,7 +47,7 @@
 
 <script>
 import CreateForm from './modules/CreateForm'
-import { createSlideShow, updateSlideShow, getList, delSlideShow } from '@/api/job'
+import { getList, delSlideShow } from '@/api/job'
 export default {
   name: 'JobList',
   components: {
@@ -59,23 +57,68 @@ export default {
     return {
       // 表头
       columns: [
-        {
-          dataIndex: 'jobId', // 和数据匹配
-          key: 'id',
-          title: 'ID',
-          scopedSlots: { customRender: 'id' }
-        },
+        // {
+        //   dataIndex: 'jobId', // 和数据匹配
+        //   key: 'id',
+        //   title: 'ID',
+        //   scopedSlots: { customRender: 'id' }
+        // },
         {
           dataIndex: 'title',
           key: 'type',
           title: '标题',
           scopedSlots: { customRender: 'type' }
         },
+        // {
+        //   dataIndex: 'content',
+        //   key: 'name',
+        //   title: '内容',
+        //   scopedSlots: { customRender: 'name' }
+        // },
         {
-          dataIndex: 'content',
-          key: 'name',
-          title: '内容',
-          scopedSlots: { customRender: 'name' }
+          dataIndex: 'station',
+          key: 'station',
+          title: '岗位',
+          scopedSlots: { customRender: 'station' }
+        },
+        {
+          dataIndex: 'treatment',
+          key: 'treatment',
+          title: '薪资',
+          scopedSlots: { customRender: 'treatment' }
+        },
+        {
+          dataIndex: 'address',
+          key: 'address',
+          title: '工作地点',
+          scopedSlots: { customRender: 'address' }
+        },
+        {
+          dataIndex: 'company',
+          key: 'company',
+          title: '公司名称',
+          scopedSlots: { customRender: 'company' }
+        },
+        {
+          dataIndex: 'createTime',
+          key: 'createTime',
+          title: '创建时间',
+          width: 200,
+          scopedSlots: { customRender: 'createTime' }
+        },
+        {
+          dataIndex: 'phone',
+          key: 'phone',
+          title: '手机号',
+          width: 200,
+          scopedSlots: { customRender: 'phone' }
+        },
+        {
+          dataIndex: 'creator',
+          key: 'creator',
+          title: '创建人',
+          width: 100,
+          scopedSlots: { customRender: 'creator' }
         },
         {
           dataIndex: 'sort',
@@ -110,19 +153,18 @@ export default {
   },
   methods: {
     /**
+     * 时间戳转换为时间
+     */
+    convertTime (time) {
+      var date = new Date(time + 8 * 3600 * 1000) // 增加8小时
+      return date.toJSON().substr(0, 19).replace('T', ' ')
+    },
+    /**
      * 输入框搜索
      */
     onSearch () {
       console.log('搜索')
       this.searchLoadFlag = true
-    },
-    createSlide () {
-      console.log('新建')
-      createSlideShow()
-    },
-    updateSlide () {
-      console.log('更新')
-      updateSlideShow()
     },
     ok () {
       console.log('点击确定')

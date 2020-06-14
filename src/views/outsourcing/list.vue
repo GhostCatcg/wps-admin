@@ -36,8 +36,8 @@
         <img :src="text" alt />
       </div>-->
       <span slot="action" slot-scope="text, record">
-        <a @click="handleEdit(record.outerId)">编辑</a>
-        <a-divider type="vertical" />
+        <!-- <a @click="handleEdit(record.outerId)">编辑</a>
+        <a-divider type="vertical" /> -->
         <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.outerId)">
           <a>删除</a>
         </a-popconfirm>
@@ -83,6 +83,20 @@ export default {
           title: '顺序',
           width: 100,
           scopedSlots: { customRender: 'sort' }
+        },
+        {
+          dataIndex: 'phone',
+          key: 'phone',
+          title: '手机号',
+          width: 150,
+          scopedSlots: { customRender: 'phone' }
+        },
+        {
+          dataIndex: 'creator',
+          key: 'creator',
+          title: '创建人',
+          width: 100,
+          scopedSlots: { customRender: 'creator' }
         },
         {
           title: '操作',

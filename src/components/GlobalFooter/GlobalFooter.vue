@@ -3,15 +3,15 @@
     <div class="links">
       <a
         href="/"
-      >Pro 首页</a>
+      >首页</a>
       <a
         href="https://github.com/GhostCatcg"
         target="_blank"
       >
         <a-icon type="github" />
       </a>
-      <a href="https://ant.design/">Ant Design</a>
-      <a href="https://vue.ant.design/">Vue Antd</a>
+      <!-- <a href="https://ant.design/">Ant Design</a> -->
+      <!-- <a href="https://vue.ant.design/">Vue Antd</a> -->
     </div>
     <div class="copyright">
       Copyright

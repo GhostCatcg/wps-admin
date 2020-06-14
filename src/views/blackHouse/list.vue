@@ -35,9 +35,10 @@
       <!-- <div class="slide-photo" slot="url" slot-scope="text">
         <img :src="text" alt />
       </div>-->
+      <span slot="createTime" slot-scope="text">{{ convertTime(text) }}</span>
       <span slot="action" slot-scope="text, record">
-        <a @click="handleEdit(record.blackId)">编辑</a>
-        <a-divider type="vertical" />
+        <!-- <a @click="handleEdit(record.blackId)">编辑</a>
+        <a-divider type="vertical" /> -->
         <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.blackId)">
           <a>删除</a>
         </a-popconfirm>
@@ -49,7 +50,7 @@
 
 <script>
 import CreateForm from './modules/CreateForm'
-import { createSlideShow, updateSlideShow, getList, delSlideShow } from '@/api/black'
+import { getList, delBlack } from '@/api/black'
 export default {
   name: 'blackList',
   components: {
@@ -85,6 +86,20 @@ export default {
           scopedSlots: { customRender: 'sort' }
         },
         {
+          dataIndex: 'createTime',
+          key: 'createTime',
+          title: '创建时间',
+          width: 200,
+          scopedSlots: { customRender: 'createTime' }
+        },
+        {
+          dataIndex: 'creator',
+          key: 'creator',
+          title: '创建人',
+          width: 100,
+          scopedSlots: { customRender: 'creator' }
+        },
+        {
           title: '操作',
           key: 'action',
           width: 150,
@@ -110,19 +125,18 @@ export default {
   },
   methods: {
     /**
+     * 时间戳转换为时间
+     */
+    convertTime (time) {
+      var date = new Date(time + 8 * 3600 * 1000) // 增加8小时
+      return date.toJSON().substr(0, 19).replace('T', ' ')
+    },
+    /**
      * 输入框搜索
      */
     onSearch () {
       console.log('搜索')
       this.searchLoadFlag = true
-    },
-    createSlide () {
-      console.log('新建')
-      createSlideShow()
-    },
-    updateSlide () {
-      console.log('更新')
-      updateSlideShow()
     },
     ok () {
       console.log('点击确定')
@@ -144,7 +158,7 @@ export default {
       const data = {
         'blackId': bannerId
       }
-      const res = await delSlideShow(data)
+      const res = await delBlack(data)
       if (res.code === 0) {
         this.$message.success('删除成功')
         this.getBlackList()

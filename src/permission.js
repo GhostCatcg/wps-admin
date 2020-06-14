@@ -1,3 +1,13 @@
+
+/**
+*
+* Author: GhostCat
+* CreatDate: 2020-04-20 17:50:40
+*
+* Description: 路由拦截的东西
+*
+*/
+
 import Vue from 'vue'
 import router from './router'
 import store from './store'

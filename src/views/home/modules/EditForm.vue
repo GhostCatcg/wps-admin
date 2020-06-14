@@ -4,7 +4,7 @@
 * Author: GhostCat
 * CreatDate: 2020-04-20 17:50:40
 *
-* Description: 添加轮播图
+* Description: 编辑轮播图
 *
 */
 <template>

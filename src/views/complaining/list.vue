@@ -8,7 +8,7 @@
 */
 <style lang='scss' scoped type='text/scss'>
 .list-wapper {
-  height:100%;
+  height: 100%;
 }
 </style>
 <template>
@@ -32,12 +32,13 @@
       :loading="tableLoading"
       @change="tableChange"
     >
-      <!-- <div class="slide-photo" slot="url" slot-scope="text">
-        <img :src="text" alt />
+      <!-- <div class='slide-photo' slot='url' slot-scope='text'>
+        <img :src='text' alt />
       </div>-->
+      <span slot="createTime" slot-scope="text">{{ convertTime(text) }}</span>
       <span slot="action" slot-scope="text, record">
-        <a @click="handleEdit(record.ventId)">编辑</a>
-        <a-divider type="vertical" />
+        <!-- <a @click='handleEdit(record.ventId)'>编辑</a>
+        <a-divider type='vertical' />-->
         <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.ventId)">
           <a>删除</a>
         </a-popconfirm>
@@ -85,6 +86,20 @@ export default {
           scopedSlots: { customRender: 'sort' }
         },
         {
+          dataIndex: 'createTime',
+          key: 'createTime',
+          title: '创建时间',
+          width: 200,
+          scopedSlots: { customRender: 'createTime' }
+        },
+        {
+          dataIndex: 'creator',
+          key: 'creator',
+          title: '创建人',
+          width: 100,
+          scopedSlots: { customRender: 'creator' }
+        },
+        {
           title: '操作',
           key: 'action',
           width: 150,
@@ -110,6 +125,13 @@ export default {
   },
   methods: {
     /**
+     * 时间戳转换为时间
+     */
+    convertTime (time) {
+      var date = new Date(time + 8 * 3600 * 1000) // 增加8小时
+      return date.toJSON().substr(0, 19).replace('T', ' ')
+    },
+    /**
      * 输入框搜索
      */
     onSearch () {
@@ -134,7 +156,7 @@ export default {
         message: '正在抓紧开发中...',
         description:
           '先去玩把英雄联盟再来吧！',
-        icon: <a-icon type="smile" style="color: #108ee9" />
+        icon: <a-icon type='smile' style='color: #108ee9' />
       })
       // this.$refs.createModal.edit(bannerId)
     },
