@@ -100,7 +100,7 @@
 import CreateForm from './modules/CreateForm'
 import { createSlideShow, updateSlideShow, getList, delSlideShow } from '@/api/demo'
 export default {
-  name: 'demoList',
+  name: 'DemoList',
   components: {
     CreateForm
   },
