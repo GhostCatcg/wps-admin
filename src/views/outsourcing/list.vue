@@ -8,7 +8,7 @@
 */
 <style lang='scss' scoped type='text/scss'>
 .list-wapper {
-  height:100%;
+  height: 100%;
 }
 </style>
 <template>
@@ -37,7 +37,7 @@
       </div>-->
       <span slot="action" slot-scope="text, record">
         <!-- <a @click="handleEdit(record.outerId)">编辑</a>
-        <a-divider type="vertical" /> -->
+        <a-divider type="vertical" />-->
         <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.outerId)">
           <a>删除</a>
         </a-popconfirm>
@@ -108,12 +108,12 @@ export default {
       dataList: [],
       pagination: {
         total: 0,
-        pageSize: 5, // 每页中显示5条数据
+        pageSize: 10, // 每页中显示5条数据
         showTotal: total => `共有 ${total} 条数据` // 分页中显示总的数据
       },
       pageOption: {
         pageNum: 1,
-        pageSize: 5
+        pageSize: 10
       },
       tableLoading: false,
       searchLoadFlag: false

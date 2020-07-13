@@ -109,12 +109,12 @@ export default {
       dataList: [],
       pagination: {
         total: 0,
-        pageSize: 5, // 每页中显示5条数据
+        pageSize: 10, // 每页中显示10条数据
         showTotal: total => `共有 ${total} 条数据` // 分页中显示总的数据
       },
       pageOption: {
         pageNum: 1,
-        pageSize: 5
+        pageSize: 10
       },
       tableLoading: false,
       searchLoadFlag: false

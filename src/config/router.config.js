@@ -139,16 +139,16 @@ export const asyncRouterMap = [
         ]
       },
       {
-        path: 'gallery',
-        name: 'gallery',
-        redirect: 'gallery/list',
+        path: 'demo',
+        name: 'demo',
+        redirect: 'demo/list',
         component: RouteView,
         meta: { title: '作品展示', keepAlive: true, icon: 'setting', permission: ['dashboard'] },
         children: [
           {
             path: 'list/:pageNo([1-9]\\d*)?',
-            name: 'galleryList',
-            component: () => import('@/views/trainee/list'),
+            name: 'demoList',
+            component: () => import('@/views/demo/list'),
             meta: { title: '作品展示', keepAlive: true, permission: ['dashboard'] }
           }
         ]

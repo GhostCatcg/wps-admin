@@ -1,19 +1,47 @@
 /**
 *
 * Author: GhostCat
-* CreatDate: 2020-05-25 20:34:47
+* CreatDate: 2020-05-25 20:36:52
 *
-* Description: 求职页面
+* Description: 练习生
 *
 */
-*/
+
 <style lang='scss' scoped type='text/scss'>
 .list-wapper {
   height: 100%;
 }
 </style>
+<style scoped>
+/* For demo */
+.ant-carousel >>> .slick-slide {
+  text-align: center;
+  height: 160px;
+  line-height: 160px;
+  background: #364d79;
+  overflow: hidden;
+}
+
+.ant-carousel >>> .slick-slide h3 {
+  color: #fff;
+}
+</style>
 <template>
   <a-card :bordered="false" class="slide-wapper">
+    <a-carousel :after-change="onChange">
+      <div>
+        <h3>1</h3>
+      </div>
+      <div>
+        <h3>2</h3>
+      </div>
+      <div>
+        <h3>3</h3>
+      </div>
+      <div>
+        <h3>4</h3>
+      </div>
+    </a-carousel>
     <div class="table-operator">
       <a-input-search
         v-show="false"
@@ -33,12 +61,34 @@
       :loading="tableLoading"
       @change="tableChange"
     >
-      <span slot="createTime" slot-scope="text">{{ convertTime(text) }}</span>
+      <!-- <div class="slide-photo" slot="url" slot-scope="text">
+        <img :src="text" alt />
+      </div>-->
+      <div slot="content">
+        <a-carousel :after-change="onChange">
+          <div>
+            <h3>1</h3>
+          </div>
+          <div>
+            <h3>2</h3>
+          </div>
+          <div>
+            <h3>3</h3>
+          </div>
+          <div>
+            <h3>4</h3>
+          </div>
+        </a-carousel>
+      </div>
       <span slot="action" slot-scope="text, record">
-        <!-- <a @click="handleEdit(record.jobId)">编辑</a>
+        <!-- <a @click="handleEdit(record.outerId)">编辑</a>
         <a-divider type="vertical" />-->
-        <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.wantId)">
+        <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.outerId)">
           <a>删除</a>
+        </a-popconfirm>
+        <a-divider type="vertical" />
+        <a-popconfirm title="设为精选？" @confirm="() => setFeatured(record.outerId)">
+          <a>设为精选</a>
         </a-popconfirm>
       </span>
     </a-table>
@@ -48,9 +98,9 @@
 
 <script>
 import CreateForm from './modules/CreateForm'
-import { getList, delJobList } from '@/api/jobSearch'
+import { createSlideShow, updateSlideShow, getList, delSlideShow } from '@/api/demo'
 export default {
-  name: 'JobList',
+  name: 'demoList',
   components: {
     CreateForm
   },
@@ -59,54 +109,29 @@ export default {
       // 表头
       columns: [
         // {
-        //   dataIndex: 'jobId', // 和数据匹配
+        //   dataIndex: 'creatorId', // 和数据匹配
         //   key: 'id',
         //   title: 'ID',
         //   scopedSlots: { customRender: 'id' }
         // },
         {
+          dataIndex: 'typeName', // 和数据匹配
+          key: 'type',
+          title: '类型',
+          scopedSlots: { customRender: 'type' }
+        },
+        {
           dataIndex: 'title',
           key: 'type',
           title: '标题',
+          width: 100,
           scopedSlots: { customRender: 'type' }
         },
         {
           dataIndex: 'requirement',
-          key: 'requirement',
-          title: '工作内容',
-          scopedSlots: { customRender: 'requirement' }
-        },
-        {
-          dataIndex: 'station',
-          key: 'station',
-          title: '求职岗位',
-          scopedSlots: { customRender: 'station' }
-        },
-        {
-          dataIndex: 'treatment',
-          key: 'treatment',
-          title: '期望薪资',
-          scopedSlots: { customRender: 'treatment' }
-        },
-        {
-          dataIndex: 'address',
-          key: 'address',
-          title: '工作地点',
-          scopedSlots: { customRender: 'address' }
-        },
-        {
-          dataIndex: 'createTime',
-          key: 'createTime',
-          title: '创建时间',
-          width: 200,
-          scopedSlots: { customRender: 'createTime' }
-        },
-        {
-          dataIndex: 'phone',
-          key: 'phone',
-          title: '手机号',
-          width: 200,
-          scopedSlots: { customRender: 'phone' }
+          key: 'content',
+          title: '内容',
+          scopedSlots: { customRender: 'content' }
         },
         {
           dataIndex: 'creator',
@@ -114,13 +139,6 @@ export default {
           title: '创建人',
           width: 100,
           scopedSlots: { customRender: 'creator' }
-        },
-        {
-          dataIndex: 'sort',
-          key: 'sort',
-          title: '顺序',
-          width: 100,
-          scopedSlots: { customRender: 'sort' }
         },
         {
           title: '操作',
@@ -132,7 +150,7 @@ export default {
       dataList: [],
       pagination: {
         total: 0,
-        pageSize: 10, // 每页中显示10条数据
+        pageSize: 10, // 每页中显示5条数据
         showTotal: total => `共有 ${total} 条数据` // 分页中显示总的数据
       },
       pageOption: {
@@ -147,12 +165,8 @@ export default {
     this.getBlackList()
   },
   methods: {
-    /**
-     * 时间戳转换为时间
-     */
-    convertTime (time) {
-      var date = new Date(time + 8 * 3600 * 1000) // 增加8小时
-      return date.toJSON().substr(0, 19).replace('T', ' ')
+    onChange (a, b, c) {
+      console.log(a, b, c)
     },
     /**
      * 输入框搜索
@@ -160,6 +174,14 @@ export default {
     onSearch () {
       console.log('搜索')
       this.searchLoadFlag = true
+    },
+    createSlide () {
+      console.log('新建')
+      createSlideShow()
+    },
+    updateSlide () {
+      console.log('更新')
+      updateSlideShow()
     },
     ok () {
       console.log('点击确定')
@@ -175,13 +197,19 @@ export default {
       })
       // this.$refs.createModal.edit(bannerId)
     },
+    /**
+     * 设为精选
+     */
+    setFeatured (id) {
+      console.log(id)
+    },
     // 删除元素
     async handleDel (bannerId) {
       this.tableLoading = true
       const data = {
-        'jobId': bannerId
+        'exceciseId': bannerId
       }
-      const res = await delJobList(data)
+      const res = await delSlideShow(data)
       if (res.code === 0) {
         this.$message.success('删除成功')
         this.getBlackList()
