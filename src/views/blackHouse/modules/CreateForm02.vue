@@ -25,7 +25,7 @@
             :min="1"
             v-decorator="['sort', {rules: [{required: true, message: '请输入黑名单顺序'}]}]"
           />
-        </a-form-item>-->
+        </a-form-item> -->
         <a-form-item label="标题" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input v-decorator="['title', {rules: [{required: true,message: '请输入标题'}]}]" />
         </a-form-item>
@@ -37,24 +37,6 @@
           />
         </a-form-item>
 
-        <a-form-item label="选择图片" :labelCol="labelCol" :wrapperCol="wrapperCol" v-show="false">
-          <a-upload
-            action="https://cgwps.com/pc/upload/upload"
-            list-type="picture-card"
-            :file-list="fileList"
-            @preview="handlePreview"
-            v-decorator="['slide', {rules: [{required: true, message: '请上传图片'}]}]"
-            @change="handleChange01"
-          >
-            <div v-if="fileList.length < 8">
-              <a-icon type="plus" />
-              <div class="ant-upload-text">Upload</div>
-            </div>
-          </a-upload>
-          <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel01">
-            <img alt="example" style="width: 100%" :src="previewImage" />
-          </a-modal>
-        </a-form-item>
         <a-form-item label="选择图片" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-upload
             name="avatar"
@@ -94,35 +76,19 @@ export default {
       file: '',
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 }
+        sm: { span: 7 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 }
+        sm: { span: 13 }
       },
       visible: false,
       confirmLoading: false,
 
-      form: this.$form.createForm(this),
-      previewVisible: false,
-      previewImage: '',
-      fileList: []
+      form: this.$form.createForm(this)
     }
   },
   methods: {
-    handleCancel01 () {
-      this.previewVisible = false
-    },
-    async handlePreview (file) {
-      if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj)
-      }
-      this.previewImage = file.url || file.preview
-      this.previewVisible = true
-    },
-    handleChange01 ({ fileList }) {
-      this.fileList = fileList
-    },
     /**
      * 点击新建弹出来的框
      */
@@ -219,18 +185,6 @@ export default {
 }
 </script>
 
-<style>
-/* you can make up upload button and sample style by using stylesheets */
-.ant-upload-select-picture-card i {
-  font-size: 32px;
-  color: #999;
-}
-
-.ant-upload-select-picture-card .ant-upload-text {
-  margin-top: 8px;
-  color: #666;
-}
-</style>
 <style lang="scss">
 .avatar-uploader > .ant-upload {
   width: 200px;

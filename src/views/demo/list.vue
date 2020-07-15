@@ -28,21 +28,7 @@
 </style>
 <template>
   <a-card :bordered="false" class="slide-wapper">
-    <a-carousel :after-change="onChange">
-      <div>
-        <h3>1</h3>
-      </div>
-      <div>
-        <h3>2</h3>
-      </div>
-      <div>
-        <h3>3</h3>
-      </div>
-      <div>
-        <h3>4</h3>
-      </div>
-    </a-carousel>
-    <div class="table-operator">
+    <div class="table-operator" v-if="false">
       <a-input-search
         v-show="false"
         placeholder="请输入关键字"
@@ -64,7 +50,7 @@
       <!-- <div class="slide-photo" slot="url" slot-scope="text">
         <img :src="text" alt />
       </div>-->
-      <div slot="content">
+      <!-- <div slot="content">
         <a-carousel :after-change="onChange">
           <div>
             <h3>1</h3>
@@ -79,26 +65,26 @@
             <h3>4</h3>
           </div>
         </a-carousel>
-      </div>
+      </div>-->
       <span slot="action" slot-scope="text, record">
-        <!-- <a @click="handleEdit(record.outerId)">编辑</a>
-        <a-divider type="vertical" />-->
-        <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.outerId)">
+        <!-- <a @click="handleEdit(record.outerId)">编辑</a> -->
+        <!-- <a-divider type="vertical" /> -->
+        <a-popconfirm title="确定要删除吗？" @confirm="() => handleDel(record.opusId)">
           <a>删除</a>
         </a-popconfirm>
         <a-divider type="vertical" />
-        <a-popconfirm title="设为精选？" @confirm="() => setFeatured(record.outerId)">
+        <a-popconfirm title="设为精选？" @confirm="() => setFeatured(record.opusId)">
           <a>设为精选</a>
         </a-popconfirm>
       </span>
     </a-table>
-    <create-form ref="createModal" @refresh="getBlackList" />
+    <create-form ref="createModal" @refresh="getDemoList" />
   </a-card>
 </template>
 
 <script>
 import CreateForm from './modules/CreateForm'
-import { createSlideShow, updateSlideShow, getList, delSlideShow } from '@/api/demo'
+import { createSlideShow, updateSlideShow, getList, delSlideShow, creamDemo } from '@/api/demo'
 export default {
   name: 'DemoList',
   components: {
@@ -116,33 +102,35 @@ export default {
         // },
         {
           dataIndex: 'typeName', // 和数据匹配
-          key: 'type',
           title: '类型',
           scopedSlots: { customRender: 'type' }
         },
         {
           dataIndex: 'title',
-          key: 'type',
           title: '标题',
           width: 100,
           scopedSlots: { customRender: 'type' }
         },
         {
           dataIndex: 'requirement',
-          key: 'content',
           title: '内容',
           scopedSlots: { customRender: 'content' }
         },
         {
+          dataIndex: 'creamName',
+          title: '精选',
+          width: 100,
+          scopedSlots: { customRender: 'creamName' }
+        },
+        {
           dataIndex: 'creator',
-          key: 'creator',
           title: '创建人',
           width: 100,
           scopedSlots: { customRender: 'creator' }
         },
         {
+          dataIndex: 'action',
           title: '操作',
-          key: 'action',
           width: 150,
           scopedSlots: { customRender: 'action' }
         }
@@ -162,7 +150,7 @@ export default {
     }
   },
   created () {
-    this.getBlackList()
+    this.getDemoList()
   },
   methods: {
     onChange (a, b, c) {
@@ -200,29 +188,38 @@ export default {
     /**
      * 设为精选
      */
-    setFeatured (id) {
-      console.log(id)
+    async setFeatured (id) {
+      console.log(id, '设置精选')
+      const data = {
+        'opusId': id
+      }
+      const res = await creamDemo(data)
+      if (res.code === 0) {
+        this.$message.success('设置成功')
+        this.getDemoList()
+        console.log(res)
+      }
     },
     // 删除元素
-    async handleDel (bannerId) {
+    async handleDel (id) {
       this.tableLoading = true
       const data = {
-        'exceciseId': bannerId
+        'opusId': id
       }
       const res = await delSlideShow(data)
       if (res.code === 0) {
         this.$message.success('删除成功')
-        this.getBlackList()
+        this.getDemoList()
       }
     },
     // 分页、排序、筛选变化时触发
     tableChange (e) {
       this.pageOption.pageNum = e.current
       this.pageOption.pageSize = e.pageSize
-      this.getBlackList()
+      this.getDemoList()
     },
-    // 获取黑名单列表
-    async getBlackList () {
+    // 获取列表
+    async getDemoList () {
       // const key = 'updatable'
       // this.$message.loading({ content: '加载中...', key })
       this.tableLoading = true
@@ -232,9 +229,10 @@ export default {
       const res = await getList(config.data)
       if (res.code === 0) {
         this.dataList = res.data.data.items
+        console.log(this.dataList)
         this.pagination.pageSize = res.data.data.pageSize
         this.pagination.total = res.data.data.total
-        this.tableLoading = false
+        this.tableLoading = false // 取消进度条
       }
     }
   }

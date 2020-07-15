@@ -62,46 +62,46 @@ export default {
       columns: [
         {
           dataIndex: 'blackId', // 和数据匹配
-          key: 'id',
+          // key: 'id',
           title: 'ID',
           scopedSlots: { customRender: 'id' }
         },
         {
           dataIndex: 'title',
-          key: 'type',
+          // key: 'type',
           title: '标题',
           scopedSlots: { customRender: 'type' }
         },
         {
           dataIndex: 'content',
-          key: 'name',
+          // key: 'name',
           title: '内容',
           scopedSlots: { customRender: 'name' }
         },
         {
           dataIndex: 'sort',
-          key: 'sort',
+          // key: 'sort',
           title: '顺序',
           width: 100,
           scopedSlots: { customRender: 'sort' }
         },
         {
           dataIndex: 'createTime',
-          key: 'createTime',
+          // key: 'createTime',
           title: '创建时间',
           width: 200,
           scopedSlots: { customRender: 'createTime' }
         },
         {
           dataIndex: 'creator',
-          key: 'creator',
+          // key: 'creator',
           title: '创建人',
           width: 100,
           scopedSlots: { customRender: 'creator' }
         },
         {
           title: '操作',
-          key: 'action',
+          // key: 'action',
           width: 150,
           scopedSlots: { customRender: 'action' }
         }

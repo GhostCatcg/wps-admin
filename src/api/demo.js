@@ -9,8 +9,17 @@ const api = {
   delete: '/pc/opus/delete',
   update: '/pc/opus/update',
   list: '/pc/opus/list',
-  detail: '/pc/opus/detail',
-  btList: '/pc/select/opusTypeList'
+  detail: '/pc/opus/detail', // 作品详情
+  btList: '/pc/select/opusTypeList',
+  cream: '/pc/opus/cream' // 优选作品，会到首页推荐位置
+}
+
+export function creamDemo (parameter) {
+  return axios({
+    url: api.cream,
+    method: 'post',
+    data: parameter
+  })
 }
 export function createBlackList (parameter) {
   return axios({
