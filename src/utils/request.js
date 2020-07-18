@@ -1,98 +1,85 @@
-import Vue from 'vue'
 import axios from 'axios'
+import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import notification from 'ant-design-vue/es/notification' // 提示
-import { VueAxios } from './axios'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import router from '@/router'
+import { getToken } from '@/utils/auth'
 
-// 创建 axios 实例
-// console.log('request.js', process.env.VUE_APP_API_BASE_URL)
+// create an axios instance
 const service = axios.create({
-  // baseURL: process.env.VUE_APP_API_BASE_URL, // 基础的RUL
-  baseURL: 'https://cgwps.com', // 基础的RUL 不想重启所以写死一个
-  timeout: 6000, // 请求超时时间
-  headers: {
-    area: 20, // 请求默认区域（公司残留）
-    'Content-Type': 'application/json;charset=UTF-8'
-  }
+  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // withCredentials: true, // send cookies when cross-domain requests
+  timeout: 5000 // request timeout
 })
-const err = (error) => {
-  if (error.response) {
-    const data = error.response.data
-    const token = Vue.ls.get(ACCESS_TOKEN)
-    if (error.response.data.code === 403) {
-      notification.error({
-        message: 'Forbidden',
-        description: data.message
-      })
+
+// request interceptor
+service.interceptors.request.use(
+  config => {
+    // do something before request is sent
+
+    if (store.getters.token) {
+      // let each request carry token
+      // ['X-Token'] is a custom headers key
+      // please modify it according to the actual situation
+      config.headers['X-Token'] = getToken()
     }
-    if (error.response.data.code === 401 && !(data.result && data.result.isLogin)) {
-      notification.error({
-        message: 'Unauthorized',
-        description: 'Authorization verification failed'
+    return config
+  },
+  error => {
+    // do something with request error
+    console.log(error) // for debug
+    return Promise.reject(error)
+  }
+)
+
+// response interceptor
+service.interceptors.response.use(
+  /**
+   * If you want to get http information such as headers or status
+   * Please return  response => response
+  */
+
+  /**
+   * Determine the request status by custom code
+   * Here is just an example
+   * You can also judge the status by HTTP Status Code
+   */
+  response => {
+    const res = response.data
+
+    // if the custom code is not 20000, it is judged as an error.
+    if (res.code !== 20000) {
+      Message({
+        message: res.message || 'Error',
+        type: 'error',
+        duration: 5 * 1000
       })
-      if (token) {
-        store.dispatch('Logout').then(() => {
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
+
+      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
+      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+        // to re-login
+        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
+          confirmButtonText: 'Re-Login',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+          store.dispatch('user/resetToken').then(() => {
+            location.reload()
+          })
         })
       }
+      return Promise.reject(new Error(res.message || 'Error'))
+    } else {
+      return res
     }
+  },
+  error => {
+    console.log('err' + error) // for debug
+    Message({
+      message: error.message,
+      type: 'error',
+      duration: 5 * 1000
+    })
     return Promise.reject(error)
-  } else {
-    notification.error({
-      message: '网络链接失败',
-      description: '请重试'
-    })
-    localStorage.clear()
-    router.push('/user/login')
-    return false
-    // throw Error(err)
   }
-}
+)
 
-/**
- * // request interceptor 发送请求时拦截
- */
-service.interceptors.request.use(config => {
-  const token = Vue.ls.get(ACCESS_TOKEN)
-  if (token) {
-    config.headers['token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
-  }
-  return config
-}, err)
-/**
- * // request interceptor 返回数据时拦截
- */
-service.interceptors.response.use((response) => {
-  if (response.data.code === 0) {
-    return response.data
-  } else if (response.data.code === 110) {
-    // 110为登录超时，清空localStorage 进入登录页面
-    notification.error({
-      message: '登录超时',
-      description: '请重新登录'
-    })
-    localStorage.clear()
-    router.push('/user/login')
-  } else {
-    notification.error({
-      message: '错误代码' + response.data.code,
-      description: response.data.msg
-    })
-    throw Error(response.data.msg)
-  }
-}, err)
-const installer = {
-  vm: {},
-  install (Vue) {
-    Vue.use(VueAxios, service)
-  }
-}
-
-export {
-  installer as VueAxios,
-  service as axios
-}
+export default service
