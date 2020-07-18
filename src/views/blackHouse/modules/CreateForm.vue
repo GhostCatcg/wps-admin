@@ -37,9 +37,11 @@
           />
         </a-form-item>
 
-        <a-form-item label="选择图片" :labelCol="labelCol" :wrapperCol="wrapperCol" v-show="false">
+        <a-form-item label="选择图片" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <!-- action="https://cgwps.com/pc/upload/upload" -->
+
           <a-upload
-            action="https://cgwps.com/pc/upload/upload"
+            :action="uploadFile"
             list-type="picture-card"
             :file-list="fileList"
             @preview="handlePreview"
@@ -55,7 +57,8 @@
             <img alt="example" style="width: 100%" :src="previewImage" />
           </a-modal>
         </a-form-item>
-        <a-form-item label="选择图片" :labelCol="labelCol" :wrapperCol="wrapperCol">
+
+        <a-form-item label="选择图片" :labelCol="labelCol" :wrapperCol="wrapperCol" v-if="flase">
           <a-upload
             name="avatar"
             listType="picture-card"
@@ -110,8 +113,25 @@ export default {
     }
   },
   methods: {
-    handleCancel01 () {
+    /**
+     * 上传图片
+     */
+    async uploadFile (file) {
+      console.log(file)
+      console.log('上传图片')
+      const formdata = new FormData()
+      formdata.append('file', file)
+      // this.confirmLoading = true
+      const res = await uploadImg(formdata) // 上传图片
+      console.log(res)
+      if (res.code === 0) {
+        this.fileList.push(res.data.data.key)
+        return res.data.data.url
+      }
+    },
+    handleCancel01 (e) {
       this.previewVisible = false
+      console.log(e, '上传改变事件')
     },
     async handlePreview (file) {
       if (!file.url && !file.preview) {

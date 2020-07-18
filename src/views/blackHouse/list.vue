@@ -60,12 +60,12 @@ export default {
     return {
       // 表头
       columns: [
-        {
-          dataIndex: 'blackId', // 和数据匹配
-          // key: 'id',
-          title: 'ID',
-          scopedSlots: { customRender: 'id' }
-        },
+        // {
+        //   dataIndex: 'blackId', // 和数据匹配
+        //   // key: 'id',
+        //   title: 'ID',
+        //   scopedSlots: { customRender: 'id' }
+        // },
         {
           dataIndex: 'title',
           // key: 'type',

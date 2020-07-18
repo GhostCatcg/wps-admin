@@ -65,10 +65,9 @@ export function detailSlideShow (parameter) {
 }
 
 // 1、banner类型下拉  post
-export function bannerTypeList ({ parameter }) {
+export function bannerTypeList () {
   return axios({
     url: api.btList,
-    method: 'post',
-    data: parameter
+    method: 'get'
   })
 }

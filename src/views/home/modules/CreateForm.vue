@@ -18,13 +18,13 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-        <a-form-item label="排序" :labelCol="labelCol" :wrapperCol="wrapperCol">
+        <!-- <a-form-item label="排序" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input-number
             id="inputNumber"
             :min="1"
             v-decorator="['sort', {rules: [{required: true, message: '请输入轮播图的顺序'}]}]"
           />
-        </a-form-item>
+        </a-form-item> -->
 
         <a-form-item label="所属页面" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-select
@@ -32,8 +32,11 @@
             style="width: 120px"
             v-decorator="['belong', {rules: [{required: true}]}]"
           >
-            <a-select-option value="10">首页</a-select-option>
-            <a-select-option value="20">社区</a-select-option>
+            <a-select-option
+              v-for="(item, index) in bannerList"
+              :key="index"
+              :value="item.id"
+            >{{ item.name }}</a-select-option>
           </a-select>
         </a-form-item>
 
@@ -73,7 +76,7 @@
 
 <script>
 import { uploadImg } from '@/api/public'
-import { createSlideShow, detailSlideShow } from '@/api/home'
+import { createSlideShow, detailSlideShow, bannerTypeList } from '@/api/home'
 function getBase64 (img, callback) {
   const reader = new FileReader()
   reader.addEventListener('load', () => callback(reader.result))
@@ -103,9 +106,12 @@ export default {
       },
       visible: false,
       confirmLoading: false,
-
+      bannerList: [], // 轮播图列表
       form: this.$form.createForm(this)
     }
+  },
+  created () {
+    this.getBannerList()
   },
   methods: {
     /**
@@ -133,7 +139,7 @@ export default {
       }
       const res = await detailSlideShow(config.data)
       if (res.code === 0) {
-        console.log(res)
+        // console.log(res)
       }
     },
     /**
@@ -144,6 +150,20 @@ export default {
       this.form.resetFields() // 清空表单
       this.imageUrl = ''
     },
+    /**
+     * 获取轮播图类型
+     */
+    async getBannerList () {
+      const res = await bannerTypeList()
+      // console.log(res.data)
+      if (res.code === 0) {
+        console.log(res.data)
+        this.bannerList = res.data.data
+      }
+    },
+    /**
+     * 发送
+     */
     async handleSubmit (e) {
       this.form.validateFields(async (err, values) => {
         if (!err) {
@@ -160,7 +180,7 @@ export default {
                 name: values.name, // 名称
                 content: values.content, // 内容
                 pic: res.data.data.key, // 图片key
-                sort: values.sort // 排序
+                sort: 1 // 排序
               }
             }
             const result = await createSlideShow(keyConfig.data)

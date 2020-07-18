@@ -73,8 +73,11 @@
           <a>删除</a>
         </a-popconfirm>
         <a-divider type="vertical" />
-        <a-popconfirm title="设为精选？" @confirm="() => setFeatured(record.opusId)">
+        <a-popconfirm v-if="record.creamName == '普通'" title="设为优选？" @confirm="() => setFeatured(record.opusId)">
           <a>设为精选</a>
+        </a-popconfirm>
+        <a-popconfirm v-else title="取消优选？" @confirm="() => setFeatured(record.opusId)">
+          <a>取消优选</a>
         </a-popconfirm>
       </span>
     </a-table>
