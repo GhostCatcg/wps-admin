@@ -5,7 +5,8 @@ import {
 } from 'element-ui'
 import store from '@/store'
 import {
-    getToken
+    getToken,
+    removeToken
 } from '@/utils/auth'
 import router from '@/router'
 
@@ -71,6 +72,8 @@ service.interceptors.response.use(
             if (res.code == 110) {
                 // 登录超时错误代码 返回首页重新登录
                 localStorage.clear()
+                removeToken()
+                console.log('登录超时')
                 router.push('/login')
             }
             // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
