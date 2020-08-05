@@ -1,12 +1,8 @@
 <template>
   <div class="slideshow-wapper">
-<<<<<<< HEAD
-    <el-button type="primary">主要按钮</el-button>
-=======
     <div class="slide-button">
       <el-button type="primary" @click="create">新建</el-button>
     </div>
->>>>>>> df1e8ebe74f9b9c2e362975b1d368834eeef435d
     <el-table :data="tableData" v-loading="loading" class="slideshow-table" style="width: 100%">
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="type" label="类型"></el-table-column>
@@ -48,7 +44,7 @@
 
     <el-dialog title="新建轮播图" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
       <div>
-        <el-form ref="ruleForm" :model="ruleForm"  label-width="80px">
+        <el-form ref="ruleForm" :model="ruleForm" label-width="80px">
           <el-form-item label="所属页面" prop="region">
             <el-select v-model="ruleForm.region" placeholder="请选择所属页面">
               <el-option

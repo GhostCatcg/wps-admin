@@ -2,7 +2,8 @@
   <div class="navbar">
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb class="breadcrumb-container" />
+    <!-- <breadcrumb class="breadcrumb-container" /> --> 
+    <!-- 路径显示 -->
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
