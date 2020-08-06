@@ -3,7 +3,7 @@
     <div class="slide-button">
       <el-button type="primary" @click="create">新建</el-button>
     </div>
-    <el-table :data="tableData" v-loading="loading" class="slideshow-table" style="width: 100%">
+    <el-table v-if="false" :data="tableData" v-loading="loading" class="slideshow-table" style="width: 100%">
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="type" label="类型"></el-table-column>
       <el-table-column prop="img" label="图片">

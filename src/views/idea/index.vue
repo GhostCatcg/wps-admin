@@ -121,7 +121,7 @@ import { mapGetters } from "vuex";
 import {
   createBlackList,
   getList,
-  delBlack,
+  delSlideShow,
   bannerTypeList,
 } from "@/api/idea";
 // import { conversionDate } from "@/utils/tools.js";
@@ -213,7 +213,7 @@ export default {
           blackId: index.row.blackId,
         },
       };
-      const res = await delBlack(config.data);
+      const res = await delSlideShow(config.data);
       if (res.code === 0) {
         this.getSlider();
       }
