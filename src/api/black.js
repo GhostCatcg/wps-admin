@@ -1,4 +1,4 @@
-import { axios } from '@/utils/request'
+import request from '@/utils/request'
 
 const api = {
   create: '/pc/black/create',
@@ -14,7 +14,7 @@ const api = {
 // "pic":["cc342d24fbbe4ea59fa910912ec9747e.jpg","50a92d494a764d11af959931960b05a3.jpg"],      图片 支持多张
 // "sort":1 排序
 export function createBlackList (parameter) {
-  return axios({
+  return request({
     url: api.create,
     method: 'post',
     data: parameter
@@ -23,7 +23,7 @@ export function createBlackList (parameter) {
 // 删除轮播图
 // 	"bannerId":1
 export function delBlack (parameter) {
-  return axios({
+  return request({
     url: api.delete,
     method: 'post',
     data: parameter
@@ -37,7 +37,7 @@ export function delBlack (parameter) {
 // 	"pic":"719713e52cc346078e0d640b7c135fd3.jpg",
 // 	"sort":1
 export function updateSlideShow (parameter) {
-  return axios({
+  return request({
     url: api.update,
     method: 'post',
     data: parameter
@@ -47,7 +47,9 @@ export function updateSlideShow (parameter) {
 // 	"pageNum":1,    当前页
 // 	"pageSize":10    页容量
 export function getList (parameter) {
-  return axios({
+  console.log(parameter)
+  // return false
+  return request({
     url: api.list,
     method: 'post',
     data: parameter
@@ -56,7 +58,7 @@ export function getList (parameter) {
 // 轮播图详情
 // "bannerId":"1"
 export function detailSlideShow ({ parameter }) {
-  return axios({
+  return request({
     url: api.detail,
     method: 'post',
     data: parameter
@@ -65,7 +67,7 @@ export function detailSlideShow ({ parameter }) {
 
 // 1、banner类型下拉  post
 export function bannerTypeList ({ parameter }) {
-  return axios({
+  return request({
     url: api.btList,
     method: 'post',
     data: parameter

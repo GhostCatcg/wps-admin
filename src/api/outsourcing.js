@@ -1,4 +1,4 @@
-import { axios } from '@/utils/request'
+import request from '@/utils/request'
 
 const api = {
   create: '/pc/outer/create',
@@ -8,8 +8,8 @@ const api = {
   detail: '/pc/outer/detail',
   btList: '/pc/select/outerTypeList'
 }
-export function createBlackList (parameter) {
-  return axios({
+export function createBlackList(parameter) {
+  return request({
     url: api.create,
     method: 'post',
     data: parameter
@@ -17,8 +17,8 @@ export function createBlackList (parameter) {
 }
 // 删除轮播图
 // 	"bannerId":1
-export function delSlideShow (parameter) {
-  return axios({
+export function delSlideShow(parameter) {
+  return request({
     url: api.delete,
     method: 'post',
     data: parameter
@@ -31,8 +31,8 @@ export function delSlideShow (parameter) {
 // 	"content":"content1",
 // 	"pic":"719713e52cc346078e0d640b7c135fd3.jpg",
 // 	"sort":1
-export function updateSlideShow (parameter) {
-  return axios({
+export function updateSlideShow(parameter) {
+  return request({
     url: api.update,
     method: 'post',
     data: parameter
@@ -41,8 +41,8 @@ export function updateSlideShow (parameter) {
 // 列表
 // 	"pageNum":1,    当前页
 // 	"pageSize":10    页容量
-export function getList (parameter) {
-  return axios({
+export function getList(parameter) {
+  return request({
     url: api.list,
     method: 'post',
     data: parameter
@@ -50,8 +50,10 @@ export function getList (parameter) {
 }
 // 轮播图详情
 // "bannerId":"1"
-export function detailSlideShow ({ parameter }) {
-  return axios({
+export function detailSlideShow({
+  parameter
+}) {
+  return request({
     url: api.detail,
     method: 'post',
     data: parameter
@@ -59,8 +61,10 @@ export function detailSlideShow ({ parameter }) {
 }
 
 // 1、banner类型下拉  post
-export function bannerTypeList ({ parameter }) {
-  return axios({
+export function bannerTypeList({
+  parameter
+}) {
+  return request({
     url: api.btList,
     method: 'post',
     data: parameter
