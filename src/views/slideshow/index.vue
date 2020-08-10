@@ -49,7 +49,7 @@
 
     <el-dialog title="新建轮播图" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
       <div>
-        <el-form ref="ruleForm" :model="ruleForm" label-width="80px">
+        <el-form ref="ruleForm" :model="ruleForm"  label-width="80px">
           <el-form-item label="所属页面" prop="region">
             <el-select v-model="ruleForm.region" placeholder="请选择所属页面">
               <el-option
