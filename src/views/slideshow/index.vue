@@ -3,7 +3,12 @@
     <div class="slide-button">
       <el-button type="primary" @click="create">新建</el-button>
     </div>
-    <el-table v-if="false" :data="tableData" v-loading="loading" class="slideshow-table" style="width: 100%">
+    <el-table
+      :data="tableData"
+      v-loading="loading"
+      class="slideshow-table"
+      style="width: 100%"
+    >
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="type" label="类型"></el-table-column>
       <el-table-column prop="img" label="图片">
@@ -62,9 +67,17 @@
             <el-input type="textarea" v-model="ruleForm.desc"></el-input>
           </el-form-item>
           <el-form-item label="上传图片">
-            <el-upload action="#" list-type="picture-card" :auto-upload="false">
+            <el-upload
+              action="#"
+              :http-request="httpRequest"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+              list-type="picture-card"
+              :on-remove="handleRemove"
+              :limit="1"
+            >
               <i slot="default" class="el-icon-plus"></i>
-              <div slot="file" slot-scope="{file}">
+              <div slot="file" slot-scope="{file}" v-if="false">
                 <img class="el-upload-list__item-thumbnail" :src="file.url" alt />
                 <span class="el-upload-list__item-actions">
                   <span
@@ -98,7 +111,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
-        <el-button type="primary" @click="onSubmit">确 定</el-button>
+        <el-button type="primary" @click="onSubmit('ruleForm')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -112,6 +125,7 @@ import {
   delSlideShow,
   bannerTypeList,
 } from "@/api/slideshow";
+import { uploadImg } from "@/api/public";
 export default {
   name: "Slideshow",
   components: {},
@@ -139,18 +153,58 @@ export default {
       dialogImageUrl: "",
       imgFlag: false,
       disabled: false,
+
+      imgSrc: "",
     };
   },
   created() {
     this.getSlider();
   },
   methods: {
+    /**
+     * 删除文件
+     */
     handleRemove(file) {
       console.log(file);
+      return false;
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.imgFlag = true;
+    },
+    /**
+     * 覆盖默认上传事件，自定义上传
+     */
+    async httpRequest(data) {
+      var formData = new FormData();
+      formData.append("file", data.file);
+      const res = await uploadImg(formData);
+      if (res.code == 0) {
+        this.$message({
+          message: "上传成功",
+          type: "success",
+        });
+        // this.imgList.push(res.data.data);
+        this.imgSrc = res.data.data.key;
+      }
+    },
+    /**
+     * 上传成功
+     */
+    handleAvatarSuccess(res, file) {
+      console.log("上传成功");
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    /**
+     * 上传头像之前
+     */
+    beforeAvatarUpload(file) {
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isLt2M;
     },
     /**
      * 下载
@@ -180,9 +234,9 @@ export default {
     /**
      * 提交表单
      */
-    onSubmit() {
+    onSubmit(formName) {
       console.log("submit!");
-      this.dialogVisible = false;
+      this.createSlider();
     },
     /**
      * 关闭弹窗
@@ -210,9 +264,17 @@ export default {
      */
     async createSlider() {
       const config = {
-        data: {},
+        data: {
+          type: this.ruleForm.region,
+          name: this.ruleForm.name,
+          content: this.ruleForm.desc,
+          pic: this.imgSrc,
+        },
       };
-      let res = await createSlideShow();
+      let res = await createSlideShow(config.data);
+      if (res.code == 0) {
+        this.dialogVisible = false;
+      }
     },
     async getSlider() {
       const config = {

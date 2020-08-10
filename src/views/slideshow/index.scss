@@ -3,6 +3,14 @@
   background: #fff;
   padding: 20px;
 
+  ::v-deep {
+    &.uploadHide {
+      .el-upload-list.el-upload-list--picture-card+.el-upload {
+        display: none;
+      }
+    }
+  }
+
   .slide-button {
     display: flex;
     justify-content: flex-end;

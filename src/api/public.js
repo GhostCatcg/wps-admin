@@ -4,7 +4,7 @@
  * @returns {*}
  */
 
-import { axios } from '@/utils/request'
+import axios from '@/utils/request'
 const api = {
     upload: '/pc/upload/upload'
 }
