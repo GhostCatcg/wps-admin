@@ -210,7 +210,7 @@ export default {
       this.loading = true;
       const config = {
         data: {
-          blackId: index.row.blackId,
+          wantId: index.row.wantId,
         },
       };
       const res = await delJobList(config.data);
@@ -248,7 +248,7 @@ export default {
             img: item.url,
             createTime: item.createTime,
             creator: item.creator,
-            blackId: item.blackId,
+            wantId: item.wantId,
           };
         });
         this.loading = false;

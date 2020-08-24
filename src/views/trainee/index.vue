@@ -210,7 +210,7 @@ export default {
       this.loading = true;
       const config = {
         data: {
-          blackId: index.row.blackId,
+          exceciseId: index.row.exceciseId,
         },
       };
       const res = await delSlideShow(config.data);
@@ -248,7 +248,7 @@ export default {
             img: item.url,
             createTime: item.createTime,
             creator: item.creator,
-            blackId: item.blackId,
+            exceciseId: item.exceciseId,
           };
         });
         this.loading = false;
