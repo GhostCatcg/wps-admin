@@ -28,11 +28,18 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建日期"></el-table-column>
+      <el-table-column prop="createTime" label="创建日期">
+        <template slot-scope="scope">
+          {{ $moment(scope.row.createTime).format("YYYY-DD-MM h:mm:ss a") }}
+        </template>
+      </el-table-column>
       <el-table-column prop="creator" label="创建人"></el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
-          <el-popconfirm @onConfirm="deleteRow(scope, tableData)" title="这是一段内容确定删除吗？">
+          <el-popconfirm
+            @onConfirm="deleteRow(scope, tableData)"
+            title="这是一段内容确定删除吗？"
+          >
             <el-button slot="reference">删除</el-button>
           </el-popconfirm>
         </template>
@@ -47,9 +54,14 @@
       ></el-pagination>
     </div>
 
-    <el-dialog title="新建轮播图" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+    <el-dialog
+      title="新建轮播图"
+      :visible.sync="dialogVisible"
+      width="50%"
+      :before-close="handleClose"
+    >
       <div>
-        <el-form ref="ruleForm" :model="ruleForm"  label-width="80px">
+        <el-form ref="ruleForm" :model="ruleForm" label-width="80px">
           <el-form-item label="所属页面" prop="region">
             <el-select v-model="ruleForm.region" placeholder="请选择所属页面">
               <el-option
@@ -77,8 +89,12 @@
               :limit="1"
             >
               <i slot="default" class="el-icon-plus"></i>
-              <div slot="file" slot-scope="{file}" v-if="false">
-                <img class="el-upload-list__item-thumbnail" :src="file.url" alt />
+              <div slot="file" slot-scope="{ file }" v-if="false">
+                <img
+                  class="el-upload-list__item-thumbnail"
+                  :src="file.url"
+                  alt
+                />
                 <span class="el-upload-list__item-actions">
                   <span
                     class="el-upload-list__item-preview"
@@ -111,7 +127,9 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
-        <el-button type="primary" @click="onSubmit('ruleForm')">确 定</el-button>
+        <el-button type="primary" @click="onSubmit('ruleForm')"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
@@ -129,7 +147,7 @@ import { uploadImg } from "@/api/public";
 export default {
   name: "Slideshow",
   components: {},
-  data() {
+  data () {
     return {
       currentPage: 1, // 当前页
       total: 10, // 总页数
@@ -157,25 +175,25 @@ export default {
       imgSrc: "",
     };
   },
-  created() {
+  created () {
     this.getSlider();
   },
   methods: {
     /**
      * 删除文件
      */
-    handleRemove(file) {
+    handleRemove (file) {
       console.log(file);
       return false;
     },
-    handlePictureCardPreview(file) {
+    handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url;
       this.imgFlag = true;
     },
     /**
      * 覆盖默认上传事件，自定义上传
      */
-    async httpRequest(data) {
+    async httpRequest (data) {
       var formData = new FormData();
       formData.append("file", data.file);
       const res = await uploadImg(formData);
@@ -191,14 +209,14 @@ export default {
     /**
      * 上传成功
      */
-    handleAvatarSuccess(res, file) {
+    handleAvatarSuccess (res, file) {
       console.log("上传成功");
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     /**
      * 上传头像之前
      */
-    beforeAvatarUpload(file) {
+    beforeAvatarUpload (file) {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isLt2M) {
@@ -209,10 +227,10 @@ export default {
     /**
      * 下载
      */
-    handleDownload(file) {
+    handleDownload (file) {
       console.log(file);
     },
-    async create() {
+    async create () {
       this.dialogVisible = true;
       const res = await bannerTypeList();
       if (res.code === 0) {
@@ -227,27 +245,27 @@ export default {
     /**
      * 重置表单
      */
-    resetForm(formName) {
+    resetForm (formName) {
       this.dialogVisible = false;
       this.$refs[formName].resetFields();
     },
     /**
      * 提交表单
      */
-    onSubmit(formName) {
+    onSubmit (formName) {
       console.log("submit!");
       this.createSlider();
     },
     /**
      * 关闭弹窗
      */
-    handleClose(done) {
+    handleClose (done) {
       done();
     },
     /**
      * 删除轮播图
      */
-    async deleteRow(index, rows) {
+    async deleteRow (index, rows) {
       this.loading = true;
       const config = {
         data: {
@@ -262,7 +280,7 @@ export default {
     /**
      * 创建轮播图
      */
-    async createSlider() {
+    async createSlider () {
       const config = {
         data: {
           type: this.ruleForm.region,
@@ -276,7 +294,7 @@ export default {
         this.dialogVisible = false;
       }
     },
-    async getSlider() {
+    async getSlider () {
       const config = {
         data: {
           pageNum: 1,

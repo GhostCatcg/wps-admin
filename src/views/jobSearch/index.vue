@@ -33,8 +33,9 @@
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建日期">
-        <!-- <template slot-scope="scope">{{conversionDate('Y-m-d H:i:s',scope)}}</template> -->
-        <!-- <template slot-scope="scope">{{scope}}</template> -->
+        <template slot-scope="scope">
+          {{ $moment(scope.row.createTime).format("YYYY-DD-MM h:mm:ss a") }}
+        </template>
       </el-table-column>
       <el-table-column prop="creator" label="创建人"></el-table-column>
       <el-table-column fixed="right" label="操作">

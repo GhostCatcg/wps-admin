@@ -11,14 +11,22 @@
     <div class="slide-button">
       <el-button type="primary" @click="create">新建</el-button>
     </div>
-    <el-table :data="tableData" v-loading="loading" class="slideshow-table" style="width: 100%">
+    <el-table
+      :data="tableData"
+      v-loading="loading"
+      class="slideshow-table"
+      style="width: 100%"
+    >
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="content" label="内容"></el-table-column>
       <el-table-column prop="img" label="图片">
         <template slot-scope="scope">
-          <div class="demo-image__placeholder">
-            <div class="block">
-              <el-image :src="scope.row.img">
+          <el-carousel
+            height="150px"
+            v-if="scope.row.img && scope.row.img.length != 0"
+          >
+            <el-carousel-item v-for="item in scope.row.img" :key="item">
+              <el-image :src="item">
                 <div slot="placeholder" class="image-slot">
                   加载中
                   <span class="dot">...</span>
@@ -27,18 +35,22 @@
                   <i class="el-icon-picture-outline"></i>
                 </div>
               </el-image>
-            </div>
-          </div>
+            </el-carousel-item>
+          </el-carousel>
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建日期">
-        <!-- <template slot-scope="scope">{{conversionDate('Y-m-d H:i:s',scope)}}</template> -->
-        <!-- <template slot-scope="scope">{{scope}}</template> -->
+        <template slot-scope="scope">
+          {{ $moment(scope.row.createTime).format("YYYY-DD-MM h:mm:ss a") }}
+        </template>
       </el-table-column>
       <el-table-column prop="creator" label="创建人"></el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
-          <el-popconfirm @onConfirm="deleteRow(scope, tableData)" title="这是一段内容确定删除吗？">
+          <el-popconfirm
+            @onConfirm="deleteRow(scope, tableData)"
+            title="这是一段内容确定删除吗？"
+          >
             <el-button slot="reference">删除</el-button>
           </el-popconfirm>
         </template>
@@ -53,7 +65,12 @@
       ></el-pagination>
     </div>
 
-    <el-dialog title="新建轮播图" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+    <el-dialog
+      title="新建轮播图"
+      :visible.sync="dialogVisible"
+      width="50%"
+      :before-close="handleClose"
+    >
       <div>
         <el-form ref="ruleForm" :model="ruleForm" label-width="80px">
           <el-form-item label="所属页面" prop="region">
@@ -75,8 +92,12 @@
           <el-form-item label="上传图片">
             <el-upload action="#" list-type="picture-card" :auto-upload="false">
               <i slot="default" class="el-icon-plus"></i>
-              <div slot="file" slot-scope="{file}">
-                <img class="el-upload-list__item-thumbnail" :src="file.url" alt />
+              <div slot="file" slot-scope="{ file }">
+                <img
+                  class="el-upload-list__item-thumbnail"
+                  :src="file.url"
+                  alt
+                />
                 <span class="el-upload-list__item-actions">
                   <span
                     class="el-upload-list__item-preview"
@@ -127,7 +148,7 @@ import {
 export default {
   name: "Slideshow",
   components: {},
-  data() {
+  data () {
     return {
       currentPage: 1, // 当前页
       total: 10, // 总页数
@@ -153,24 +174,24 @@ export default {
       disabled: false,
     };
   },
-  created() {
+  created () {
     this.getSlider();
   },
   methods: {
-    handleRemove(file) {
+    handleRemove (file) {
       console.log(file);
     },
-    handlePictureCardPreview(file) {
+    handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url;
       this.imgFlag = true;
     },
     /**
      * 下载
      */
-    handleDownload(file) {
+    handleDownload (file) {
       console.log(file);
     },
-    async create() {
+    async create () {
       this.dialogVisible = true;
       const res = await bannerTypeList();
       if (res.code === 0) {
@@ -185,27 +206,27 @@ export default {
     /**
      * 重置表单
      */
-    resetForm(formName) {
+    resetForm (formName) {
       this.dialogVisible = false;
       this.$refs[formName].resetFields();
     },
     /**
      * 提交表单
      */
-    onSubmit() {
+    onSubmit () {
       console.log("submit!");
       this.dialogVisible = false;
     },
     /**
      * 关闭弹窗
      */
-    handleClose(done) {
+    handleClose (done) {
       done();
     },
     /**
      * 删除轮播图
      */
-    async deleteRow(index, rows) {
+    async deleteRow (index, rows) {
       this.loading = true;
       const config = {
         data: {
@@ -220,7 +241,7 @@ export default {
     /**
      * 创建轮播图
      */
-    async createSlider() {
+    async createSlider () {
       const config = {
         data: {},
       };
@@ -229,7 +250,7 @@ export default {
     /**
      * 获取
      */
-    async getSlider() {
+    async getSlider () {
       const config = {
         data: {
           pageNum: 1,
@@ -244,7 +265,7 @@ export default {
           return {
             title: item.title,
             content: item.content,
-            img: item.url,
+            img: item.urlList,
             createTime: item.createTime,
             creator: item.creator,
             blackId: item.blackId,

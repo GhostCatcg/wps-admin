@@ -1,11 +1,11 @@
 import request  from '@/utils/request'
 
 const api = {
-  create: '/pc/idea/create',
-  delete: '/pc/idea/delete',
-  update: '/pc/idea/update',
-  list: '/pc/idea/list',
-  detail: '/pc/idea/detail',
+  create: '/pc/part/create',
+  delete: '/pc/part/delete',
+  update: '/pc/part/update',
+  list: '/pc/part/list',
+  detail: '/pc/part/detail',
   btList: '/pc/select/ideaTypeList'
 }
 export function createBlackList (parameter) {

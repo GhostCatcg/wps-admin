@@ -16,7 +16,7 @@ const service = axios.create({
     // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
     baseURL: 'https://cgwps.com', // 基础的RUL 不想重启所以写死一个
     // withCredentials: true, // send cookies when cross-domain requests
-    timeout: 6000, // request timeout
+    timeout: 10000, // request timeout
     headers: {
         area: 20, // 请求默认区域（公司残留）
         'Content-Type': 'application/json;charset=UTF-8'

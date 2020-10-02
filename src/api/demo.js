@@ -11,12 +11,28 @@ const api = {
   list: '/pc/opus/list',
   detail: '/pc/opus/detail', // 作品详情
   btList: '/pc/select/opusTypeList',
-  cream: '/pc/opus/cream' // 优选作品，会到首页推荐位置
+  cream: '/pc/opus/cream', // 优选作品，会到首页推荐位置
+  delCream:'/pc/opus/delCream', // 取消优选作品
+  listTopicTree:'/pc/opus/listTopicTree', // 查看评论
 }
 
+export function listTopicTree(parameter) {
+  return request({
+    url: api.listTopicTree,
+    method: 'post',
+    data: parameter
+  })
+}
 export function creamDemo(parameter) {
   return request({
     url: api.cream,
+    method: 'post',
+    data: parameter
+  })
+}
+export function delCreamDemo(parameter) {
+  return request({
+    url: api.delCream,
     method: 'post',
     data: parameter
   })

@@ -28,6 +28,10 @@ if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
 
+import moment from 'moment'//导入文件 
+
+Vue.prototype.$moment = moment;//赋值使用
+
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
