@@ -22,7 +22,10 @@
       <el-table-column prop="content" label="内容"></el-table-column>
       <el-table-column prop="img" label="图片" width="400">
         <template slot-scope="scope">
-          <el-carousel height="150px" v-if="scope.row.img && scope.row.img.length != 0">
+          <el-carousel
+            height="150px"
+            v-if="scope.row.img && scope.row.img.length != 0"
+          >
             <el-carousel-item v-for="item in scope.row.img" :key="item">
               <el-image :src="item">
                 <div slot="placeholder" class="image-slot">
@@ -53,7 +56,7 @@
           >
           <el-divider direction="vertical"></el-divider> -->
           <el-popconfirm
-            v-if="true"
+            v-if="scope.row.cream == 10"
             @onConfirm="setFeatured(scope, tableData)"
             title="确定设为精选？"
           >
@@ -145,7 +148,7 @@ export default {
     async HandleViewReviews (index, rows) {
       const config = {
         data: {
-          opusId: rows[0].opusId
+          opusId: index.row.opusId
         }
       }
       const res = await listTopicTree(config.data);
@@ -159,27 +162,34 @@ export default {
     async delFeatured (index, rows) {
       const config = {
         data: {
-          opusId: rows[0].opusId
+          opusId: index.row.opusId
         }
       }
       const res = await delCreamDemo(config.data);
       if (res.code === 0) {
-        console.log(res)
+        this.$message({
+          message: res.msg,
+          type: 'success'
+        });
+        this.getSlider()
       }
     },
     /**
      * 设为精选
     */
     async setFeatured (index, rows) {
-      console.log(index, rows)
       const config = {
         data: {
-          opusId: rows[0].opusId
+          opusId: index.row.opusId
         }
       }
       const res = await creamDemo(config.data);
       if (res.code === 0) {
-        console.log(res)
+        this.$message({
+          message: res.msg,
+          type: 'success'
+        });
+        this.getSlider()
       }
     },
     /**
@@ -266,6 +276,7 @@ export default {
             createTime: item.createTime,
             creator: item.creator,
             opusId: item.opusId,
+            cream: item.cream
           };
         });
         this.loading = false;
