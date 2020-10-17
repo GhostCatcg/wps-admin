@@ -6,7 +6,6 @@ const api = {
   update: '/pc/outer/update',
   list: '/pc/outer/list',
   detail: '/pc/outer/detail',
-  btList: '/pc/select/outerTypeList'
 }
 export function createBlackList(parameter) {
   return request({
@@ -60,13 +59,3 @@ export function detailSlideShow({
   })
 }
 
-// 1、banner类型下拉  post
-export function bannerTypeList({
-  parameter
-}) {
-  return request({
-    url: api.btList,
-    method: 'post',
-    data: parameter
-  })
-}

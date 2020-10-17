@@ -10,7 +10,6 @@ const api = {
   update: '/pc/opus/update',
   list: '/pc/opus/list',
   detail: '/pc/opus/detail', // 作品详情
-  btList: '/pc/select/opusTypeList',
   cream: '/pc/opus/cream', // 优选作品，会到首页推荐位置
   delCream:'/pc/opus/delCream', // 取消优选作品
   listTopicTree:'/pc/opus/listTopicTree', // 查看评论
@@ -84,17 +83,6 @@ export function detailSlideShow({
 }) {
   return request({
     url: api.detail,
-    method: 'post',
-    data: parameter
-  })
-}
-
-// 1、banner类型下拉  post
-export function bannerTypeList({
-  parameter
-}) {
-  return request({
-    url: api.btList,
     method: 'post',
     data: parameter
   })

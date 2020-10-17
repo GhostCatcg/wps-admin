@@ -5,6 +5,9 @@
 *
 * Description: 小黑屋
 *
+*
+* 富文本编辑器操作 ： vue mavon-editor
+*
 */
 <template>
   <div class="slideshow-wapper">
@@ -66,31 +69,29 @@
     </div>
 
     <el-dialog
-      title="新建轮播图"
+      title="新建小黑屋"
       :visible.sync="dialogVisible"
       width="50%"
       :before-close="handleClose"
     >
       <div>
         <el-form ref="ruleForm" :model="ruleForm" label-width="80px">
-          <el-form-item label="所属页面" prop="region">
-            <el-select v-model="ruleForm.region" placeholder="请选择所属页面">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
+          <el-form-item label="标题" prop="title">
+            <el-input v-model="ruleForm.title"></el-input>
           </el-form-item>
-          <el-form-item label="图片名称" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="图片内容" prop="desc">
-            <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+          <el-form-item label="内容" prop="content">
+            <el-input type="textarea" v-model="ruleForm.content"></el-input>
           </el-form-item>
           <el-form-item label="上传图片">
-            <el-upload action="#" list-type="picture-card" :auto-upload="false">
+            <el-upload
+              action="#"
+              list-type="picture-card"
+              :http-request="httpRequest"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+              :on-remove="handleRemove"
+              :limit="6"
+            >
               <i slot="default" class="el-icon-plus"></i>
               <div slot="file" slot-scope="{ file }">
                 <img
@@ -105,24 +106,10 @@
                   >
                     <i class="el-icon-zoom-in"></i>
                   </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleDownload(file)"
-                  >
-                    <i class="el-icon-download"></i>
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleRemove(file)"
-                  >
-                    <i class="el-icon-delete"></i>
-                  </span>
                 </span>
               </div>
             </el-upload>
-            <el-dialog :visible.sync="imgFlag">
+            <el-dialog data-msg="放大的图片" :visible.sync="imgFlag">
               <img width="100%" :src="dialogImageUrl" alt />
             </el-dialog>
           </el-form-item>
@@ -138,17 +125,13 @@
 
 <script>
 import { mapGetters } from "vuex";
-import {
-  createBlackList,
-  getList,
-  delBlack,
-  bannerTypeList,
-} from "@/api/black";
+import { createBlackList, getList, delBlack } from "@/api/black";
 // import { conversionDate } from "@/utils/tools.js";
+import { bannerTypeList, uploadImg } from "@/api/public";
 export default {
   name: "Slideshow",
   components: {},
-  data () {
+  data() {
     return {
       currentPage: 1, // 当前页
       total: 10, // 总页数
@@ -156,77 +139,102 @@ export default {
       tableData: [],
       dialogVisible: false,
 
-      options: [],
-      value: "",
       ruleForm: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
+        title: "",
+        content: "",
       },
+      picList: [],
 
       dialogImageUrl: "",
       imgFlag: false,
       disabled: false,
     };
   },
-  created () {
+  created() {
     this.getSlider();
   },
   methods: {
-    handleRemove (file) {
-      console.log(file);
-    },
-    handlePictureCardPreview (file) {
+    handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.imgFlag = true;
     },
     /**
      * 下载
      */
-    handleDownload (file) {
+    handleDownload(file) {
       console.log(file);
     },
-    async create () {
+    async create() {
       this.dialogVisible = true;
-      const res = await bannerTypeList();
-      if (res.code === 0) {
-        this.options = res.data.data.map((item) => {
-          return {
-            value: item.id,
-            label: item.name,
-          };
-        });
-      }
     },
     /**
      * 重置表单
      */
-    resetForm (formName) {
+    resetForm(formName) {
       this.dialogVisible = false;
       this.$refs[formName].resetFields();
     },
     /**
      * 提交表单
      */
-    onSubmit () {
-      console.log("submit!");
-      this.dialogVisible = false;
+    async onSubmit() {
+      const config = {
+        data: {
+          title: this.ruleForm.title,
+          content: this.ruleForm.content,
+          pic: this.picList,
+        },
+      };
+      const res = await createBlackList(config.data);
+      if (res.code === 0) {
+        this.dialogVisible = false;
+        this.$refs["ruleForm"].resetFields();
+        this.getSlider();
+      }
+    },
+
+    /**
+     * 覆盖默认上传事件，自定义上传
+     */
+    async httpRequest(data) {
+      var formData = new FormData();
+      formData.append("file", data.file);
+      const res = await uploadImg(formData);
+      if (res.code == 0) {
+        this.picList.push(res.data.data.key);
+      }
+    },
+
+    // 删掉图片
+    handleRemove(file) {
+      console.log(file);
+    },
+    /**
+     * 上传成功
+     */
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    /**
+     * 上传头像之前
+     */
+    beforeAvatarUpload(file) {
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isLt2M;
     },
     /**
      * 关闭弹窗
      */
-    handleClose (done) {
+    handleClose(done) {
       done();
     },
     /**
      * 删除轮播图
      */
-    async deleteRow (index, rows) {
+    async deleteRow(index, rows) {
       this.loading = true;
       const config = {
         data: {
@@ -241,7 +249,7 @@ export default {
     /**
      * 创建轮播图
      */
-    async createSlider () {
+    async createSlider() {
       const config = {
         data: {},
       };
@@ -250,7 +258,7 @@ export default {
     /**
      * 获取
      */
-    async getSlider () {
+    async getSlider() {
       const config = {
         data: {
           pageNum: 1,

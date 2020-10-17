@@ -10,9 +10,8 @@ const api = {
   update: '/pc/excecise/update',
   list: '/pc/excecise/list',
   detail: '/pc/excecise/detail',
-  btList: '/pc/select/exceciseTypeList'
 }
-export function createBlackList(parameter) {
+export function createExceciseList(parameter) {
   return request({
     url: api.create,
     method: 'post',
@@ -59,17 +58,6 @@ export function detailSlideShow({
 }) {
   return request({
     url: api.detail,
-    method: 'post',
-    data: parameter
-  })
-}
-
-// 1、banner类型下拉  post
-export function bannerTypeList({
-  parameter
-}) {
-  return request({
-    url: api.btList,
     method: 'post',
     data: parameter
   })

@@ -6,7 +6,6 @@ const api = {
   update: '/pc/black/update',
   list: '/pc/black/list',
   detail: '/pc/black/detail',
-  btList: '/pc/select/blackTypeList'
 }
 // 1、创建黑名单 post
 // "title":"黑名单1", 标题
@@ -60,15 +59,6 @@ export function getList (parameter) {
 export function detailSlideShow ({ parameter }) {
   return request({
     url: api.detail,
-    method: 'post',
-    data: parameter
-  })
-}
-
-// 1、banner类型下拉  post
-export function bannerTypeList ({ parameter }) {
-  return request({
-    url: api.btList,
     method: 'post',
     data: parameter
   })

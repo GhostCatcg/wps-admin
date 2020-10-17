@@ -6,7 +6,6 @@ const api = {
   update: '/pc/vent/update',
   list: '/pc/vent/list',
   detail: '/pc/vent/detail',
-  btList: '/pc/select/ventTypeList'
 }
 export function createBlackList(parameter) {
   return request({
@@ -55,17 +54,6 @@ export function detailSlideShow({
 }) {
   return request({
     url: api.detail,
-    method: 'post',
-    data: parameter
-  })
-}
-
-// 1、banner类型下拉  post
-export function bannerTypeList({
-  parameter
-}) {
-  return request({
-    url: api.btList,
     method: 'post',
     data: parameter
   })

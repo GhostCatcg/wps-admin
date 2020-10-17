@@ -96,12 +96,13 @@ import {
   createBlackList,
   getList,
   delSlideShow,
-  bannerTypeList,
   creamDemo,
   delCreamDemo,
   listTopicTree
 } from "@/api/demo";
 // import { conversionDate } from "@/utils/tools.js";
+import { bannerTypeList } from "@/api/public";
+
 export default {
   name: "Slideshow",
   components: {},

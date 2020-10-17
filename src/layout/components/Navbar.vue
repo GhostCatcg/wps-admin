@@ -8,6 +8,19 @@
     <div class="switch">
       <el-button @click="switchReview">切换审核状态</el-button>
     </div>
+    <div class="search">
+      <el-input
+        placeholder="请输入内容"
+        v-model="searchContent"
+        class="input-with-select"
+      >
+        <el-button
+          @click="search"
+          slot="append"
+          icon="el-icon-search"
+        ></el-button>
+      </el-input>
+    </div>
     <!-- <breadcrumb class="breadcrumb-container" /> -->
     <!-- 路径显示 -->
 
@@ -37,44 +50,63 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import { updateHour } from '@/api/public'
+import { mapGetters } from "vuex";
+import Breadcrumb from "@/components/Breadcrumb";
+import Hamburger from "@/components/Hamburger";
+import { updateHour, searchKeyWord } from "@/api/public";
 
 export default {
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
+  },
+  data() {
+    return {
+      searchContent: "",
+    };
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar'
-    ])
+    ...mapGetters(["sidebar", "avatar"]),
   },
   methods: {
-    toggleSideBar () {
-      this.$store.dispatch('app/toggleSideBar')
+    toggleSideBar() {
+      this.$store.dispatch("app/toggleSideBar");
     },
-    async logout () {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    async logout() {
+      await this.$store.dispatch("user/logout");
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
     },
     /**
      * 切换审核状态
      */
-    async switchReview () {
-      const res = await updateHour()
+    async switchReview() {
+      const res = await updateHour();
       if (res.code === 0) {
         this.$message({
-          message: res.data.data == 24 ? '当前为审核模式' : '当前为不审核模式',
-          type: 'success'
+          message: res.data.data == 24 ? "当前为审核模式" : "当前为不审核模式",
+          type: "success",
         });
       }
     },
-  }
-}
+    /**
+     * search
+     */
+    async search() {
+      const config = {
+        data: {
+          keyWord: "1",
+          type: 30, //  模块值， 来源于上面的下拉框
+          pageNum: 1,
+          pageSize: 20,
+        },
+      };
+      const res = await searchKeyWord(config.data);
+      if (res.data == 0) {
+        console.log(res);
+      }
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -84,6 +116,7 @@ export default {
   position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  .search,
   .switch {
     height: 100%;
     display: flex;
@@ -92,6 +125,7 @@ export default {
     float: left;
     margin-left: 20px;
   }
+
   .hamburger-container {
     line-height: 46px;
     height: 100%;

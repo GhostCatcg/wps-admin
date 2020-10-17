@@ -81,10 +81,10 @@
           <el-form-item label="上传图片">
             <el-upload
               action="#"
+              list-type="picture-card"
               :http-request="httpRequest"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
-              list-type="picture-card"
               :on-remove="handleRemove"
               :limit="1"
             >
@@ -141,9 +141,9 @@ import {
   createSlideShow,
   listSlideShow,
   delSlideShow,
-  bannerTypeList,
+  
 } from "@/api/slideshow";
-import { uploadImg } from "@/api/public";
+import { uploadImg,bannerTypeList } from "@/api/public";
 export default {
   name: "Slideshow",
   components: {},

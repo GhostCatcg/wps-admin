@@ -143,9 +143,10 @@ import {
   createBlackList,
   getList,
   delSlideShow,
-  bannerTypeList,
 } from "@/api/complaining";
 // import { conversionDate } from "@/utils/tools.js";
+import { bannerTypeList } from "@/api/public";
+
 export default {
   name: "Slideshow",
   components: {},

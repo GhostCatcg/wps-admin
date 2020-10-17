@@ -9,9 +9,9 @@
 
 <template>
   <div class="slideshow-wapper">
-    <div class="slide-button">
+    <!-- <div class="slide-button">
       <el-button type="primary" @click="create">新建</el-button>
-    </div>
+    </div> -->
     <el-table
       :data="tableData"
       v-loading="loading"
@@ -143,9 +143,10 @@ import {
   createBlackList,
   getList,
   delSlideShow,
-  bannerTypeList,
 } from "@/api/idea";
 // import { conversionDate } from "@/utils/tools.js";
+import { bannerTypeList } from "@/api/public";
+
 export default {
   name: "Slideshow",
   components: {},

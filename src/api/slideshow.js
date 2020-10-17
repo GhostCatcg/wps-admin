@@ -9,7 +9,6 @@ const api = {
     update: '/pc/banner/update',
     list: '/pc/banner/list',
     detail: '/pc/banner/detail',
-    btList: '/pc/select/bannerTypeList'
 }
 
 //  创建轮播图  post
@@ -66,13 +65,5 @@ export function detailSlideShow(parameter) {
         url: api.detail,
         method: 'post',
         data: parameter
-    })
-}
-
-// 1、banner类型下拉  post
-export function bannerTypeList() {
-    return request({
-        url: api.btList,
-        method: 'get'
     })
 }
