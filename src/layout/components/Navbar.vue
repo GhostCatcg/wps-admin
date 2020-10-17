@@ -8,7 +8,7 @@
     <div class="switch">
       <el-button @click="switchReview">切换审核状态</el-button>
     </div>
-    <div class="search">
+    <div class="search" v-if="false">
       <el-input
         placeholder="请输入内容"
         v-model="searchContent"
