@@ -10,7 +10,7 @@ const api = {
   upload: '/pc/upload/upload',
   updateHour: "/pc/config/updateHour", // 开启/关闭 审核状态
   btList: '/pc/select/bannerTypeList',
-  searchKeyWord: 'chat/search/keyWord'
+  searchKeyWord: '/pc/search/keyWord'
 
 }
 // 上传图片

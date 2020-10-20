@@ -8,11 +8,12 @@
     <div class="switch">
       <el-button @click="switchReview">切换审核状态</el-button>
     </div>
-    <div class="search" v-if="false">
+    <div class="search">
       <el-input
-        placeholder="请输入内容"
+        placeholder="请输入要搜索的内容"
         v-model="searchContent"
         class="input-with-select"
+        @keyup.enter.native="search"
       >
         <el-button
           @click="search"
@@ -46,6 +47,54 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+
+    <el-dialog
+      :title="`${this.searchContent} 的搜索结果`"
+      :visible.sync="searchFlag"
+      width="100%"
+      :before-close="handleClose"
+      custom-class="el-search"
+    >
+      <div>
+        <el-table :data="gridData">
+          <el-table-column
+            property="invitTypeName"
+            label="类型"
+            width="150"
+          ></el-table-column>
+          <el-table-column
+            property="title"
+            label="标题"
+            width="200"
+          ></el-table-column>
+          <el-table-column property="content" label="内容"></el-table-column>
+          <!-- <el-table-column fixed="right" label="操作">
+            <template slot-scope="scope">
+              <el-popconfirm
+                @onConfirm="deleteRow(scope, tableData)"
+                title="这是一段内容确定删除吗？"
+              >
+                <el-button slot="reference">删除</el-button>
+              </el-popconfirm>
+            </template>
+          </el-table-column> -->
+        </el-table>
+        <el-pagination
+          style="margin-top: 50px"
+          background
+          layout="prev, pager, next"
+          :total="total"
+          :current-page="pageNum"
+          @current-change="changePage"
+        >
+          <!-- :page-sizes="pageSize" -->
+        </el-pagination>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <!-- <el-button @click="searchFlag = false">取 消</el-button> -->
+        <el-button type="primary" @click="searchFlag = false">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -62,7 +111,15 @@ export default {
   },
   data() {
     return {
-      searchContent: "",
+      searchContent: "", // 搜索内容
+      searchResults: "", // 搜索结果
+      searchFlag: false, // 搜索弹窗
+
+      pageNum: 1,
+      pageSize: 10,
+      total: 1,
+
+      gridData: [],
     };
   },
   computed: {
@@ -75,6 +132,11 @@ export default {
     async logout() {
       await this.$store.dispatch("user/logout");
       this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+    },
+    changePage(val) {
+      console.log(this.pageNum,val);
+      this.pageNum = val
+      this.search()
     },
     /**
      * 切换审核状态
@@ -92,23 +154,51 @@ export default {
      * search
      */
     async search() {
+      if (this.searchContent == "") {
+        this.$message({
+          message: "请输入内容",
+          type: "warning",
+        });
+        return false;
+      }
       const config = {
         data: {
-          keyWord: "1",
-          type: 30, //  模块值， 来源于上面的下拉框
-          pageNum: 1,
-          pageSize: 20,
+          keyWord: this.searchContent,
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
         },
       };
       const res = await searchKeyWord(config.data);
-      if (res.data == 0) {
-        console.log(res);
+      if (res.code == 0) {
+        if (res.data.data[0].pageVo.total == 0) {
+          this.$message("没有搜索到内容");
+        } else {
+          this.searchResults = res.data.data[0].pageVo;
+          console.log("搜索到的数据", this.searchResults);
+
+          this.total = this.searchResults.total;
+          this.pageNum = this.searchResults.pageNum;
+          this.pageSize = this.searchResults.pageSize;
+          this.gridData = this.searchResults.items;
+          this.searchFlag = true;
+        }
       }
+    },
+    handleClose() {
+      console.log("close");
+      this.pageNum=1
+      this.searchFlag = false;
     },
   },
 };
 </script>
-
+<style lang="scss">
+.el-search {
+  height: 100%;
+  margin-top: 0 !important;
+  overflow: auto;
+}
+</style>
 <style lang="scss" scoped>
 .navbar {
   height: 50px;

@@ -24,13 +24,22 @@ import '@/permission' // permission control
  * please remove it before going online ! ! !
  */
 if (process.env.NODE_ENV === 'production') {
-  const { mockXHR } = require('../mock')
+  const {
+    mockXHR
+  } = require('../mock')
   mockXHR()
 }
 
-import moment from 'moment'//导入文件 
 
-Vue.prototype.$moment = moment;//赋值使用
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+// use
+Vue.use(mavonEditor)
+
+
+import moment from 'moment' //导入文件 
+
+Vue.prototype.$moment = moment; //赋值使用
 
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })

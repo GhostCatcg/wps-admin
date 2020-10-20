@@ -43,6 +43,12 @@ export const constantRoutes = [{
       import('@/views/404'),
     hidden: true
   },
+  {
+    path: '/md',
+    component: () =>
+      import('@/views/md/index'),
+    hidden: true
+  },
 
   {
     path: '/',
@@ -87,20 +93,20 @@ export const constantRoutes = [{
       }
     }]
   },
-    // {
-    //   path: 'complaining',
-    //   component: Layout,
-    //   children: [{
-    //     path: '/complaining',
-    //     name: 'complaining',
-    //     component: () =>
-    //       import('@/views/complaining/index'),
-    //     meta: {
-    //       title: '匿名吐槽',
-    //       icon: 'el-icon-s-help'
-    //     }
-    //   }]
-    // },
+  // {
+  //   path: 'complaining',
+  //   component: Layout,
+  //   children: [{
+  //     path: '/complaining',
+  //     name: 'complaining',
+  //     component: () =>
+  //       import('@/views/complaining/index'),
+  //     meta: {
+  //       title: '匿名吐槽',
+  //       icon: 'el-icon-s-help'
+  //     }
+  //   }]
+  // },
   {
     path: 'outsourcing',
     component: Layout,

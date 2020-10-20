@@ -19,25 +19,11 @@
       style="width: 100%"
     >
       <el-table-column prop="title" label="标题"></el-table-column>
-      <el-table-column prop="content" label="内容"></el-table-column>
-      <el-table-column prop="img" label="图片">
+      <el-table-column prop="content" label="内容">
         <template slot-scope="scope">
-          <el-carousel
-            height="150px"
-            v-if="scope.row.img && scope.row.img.length != 0"
+          <el-link @click="seeContent(scope.row.content)" type="primary"
+            >查看内容</el-link
           >
-            <el-carousel-item v-for="item in scope.row.img" :key="item">
-              <el-image :src="item">
-                <div slot="placeholder" class="image-slot">
-                  加载中
-                  <span class="dot">...</span>
-                </div>
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
-            </el-carousel-item>
-          </el-carousel>
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建日期">
@@ -56,15 +42,12 @@
           </el-popconfirm>
           <el-divider direction="vertical"></el-divider> -->
 
-
           <el-popconfirm
             @onConfirm="deleteRow(scope, tableData)"
             title="这一段内容确定删除吗？"
           >
             <el-link slot="reference" type="primary">删除</el-link>
           </el-popconfirm>
-
-
         </template>
       </el-table-column>
     </el-table>
@@ -80,54 +63,38 @@
     <el-dialog
       title="新建练习生"
       :visible.sync="dialogVisible"
-      width="50%"
+      width="100%"
+      height="100%"
       :before-close="handleClose"
+      :close-on-click-modal="false"
+      custom-class="el-md-class"
     >
-      <div>
+      <div class="el-main">
         <el-form ref="ruleForm" :model="ruleForm" label-width="80px">
           <el-form-item label="标题" prop="title">
             <el-input v-model="ruleForm.title"></el-input>
           </el-form-item>
-          <el-form-item label="内容" prop="content">
-            <el-input type="textarea" v-model="ruleForm.content"></el-input>
-          </el-form-item>
-          <el-form-item label="上传图片">
-            <el-upload
-              action="#"
-              list-type="picture-card"
-              :http-request="httpRequest"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-              :on-remove="handleRemove"
-              :limit="6"
-            >
-              <i slot="default" class="el-icon-plus"></i>
-              <div slot="file" slot-scope="{ file }">
-                <img
-                  class="el-upload-list__item-thumbnail"
-                  :src="file.url"
-                  alt
-                />
-                <span class="el-upload-list__item-actions">
-                  <span
-                    class="el-upload-list__item-preview"
-                    @click="handlePictureCardPreview(file)"
-                  >
-                    <i class="el-icon-zoom-in"></i>
-                  </span>
-                </span>
-              </div>
-            </el-upload>
-            <el-dialog data-msg="放大的图片" :visible.sync="imgFlag">
-              <img width="100%" :src="dialogImageUrl" alt />
-            </el-dialog>
-          </el-form-item>
+          <mark-down
+            red="md"
+            @handleFormContent="handleFormContent"
+          ></mark-down>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
         <el-button type="primary" @click="createExcecise">确 定</el-button>
       </span>
+    </el-dialog>
+
+    <el-dialog
+      title="查看练习生"
+      :visible.sync="lookVisible"
+      width="100%"
+      :before-close="handleLookClose"
+      :close-on-click-modal="false"
+      custom-class="el-md-look-class"
+    >
+      <show-md :readmeContent="readmeContent"></show-md>
     </el-dialog>
   </div>
 </template>
@@ -142,9 +109,15 @@ import {
 } from "@/api/trainee";
 // import { conversionDate } from "@/utils/tools.js";
 import { uploadImg } from "@/api/public";
+import markDown from "@/components/public/markDown";
+import showMd from "@/components/public/showMd";
+
 export default {
   name: "Slideshow",
-  components: {},
+  components: {
+    markDown,
+    showMd,
+  },
   data() {
     return {
       currentPage: 1, // 当前页
@@ -152,6 +125,8 @@ export default {
       loading: true,
       tableData: [],
       dialogVisible: false,
+      lookVisible: false,
+      readmeContent: "",
 
       ruleForm: {
         title: "",
@@ -168,6 +143,24 @@ export default {
     this.getSlider();
   },
   methods: {
+    /**
+     * seeContent 查看md内容
+     */
+    seeContent(con) {
+      this.lookVisible = true;
+      this.readmeContent = con;
+    },
+    handleLookClose() {
+      this.lookVisible = false;
+      this.readmeContent = "";
+    },
+    /**
+     * 设置 from 的content值
+     */
+    handleFormContent(val) {
+      console.log("from接收到的值", val);
+      this.ruleForm.content = val;
+    },
     // 删掉图片
     handleRemove(file) {
       console.log(file);
@@ -203,7 +196,8 @@ export default {
       if (res.code === 0) {
         console.log(res, "上传之后");
         this.dialogVisible = false;
-        this.$refs['ruleForm'].resetFields();
+        this.$refs["ruleForm"].resetFields();
+        this.$refs.md.removeContent();
         this.getSlider();
       }
     },
@@ -297,7 +291,45 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.el-md-class {
+  height: 100%;
+  margin-top: 0 !important;
+  overflow: auto;
+  //   ::v-deep {
+  .el-dialog__footer {
+    padding: 10px 40px 20px;
+  }
+  .el-dialog__header {
+    padding: 20px 40px 10px;
+    .el-dialog__headerbtn {
+      right: 40px;
+    }
+  }
+  .el-dialog__body {
+    padding: 10px 20px;
+  }
+  //   }
+}
 
+.el-md-look-class {
+  height: 100%;
+  margin-top:0 !important;
+  overflow: auto;
+  .el-dialog__footer {
+    padding: 10px 40px 20px;
+  }
+  .el-dialog__header {
+    padding: 20px 40px 10px;
+    .el-dialog__headerbtn {
+      right: 40px;
+    }
+  }
+  .el-dialog__body {
+    padding: 10px 20px 50px;
+  }
+}
+</style>
 <style lang="scss" scoped>
 @import "./index.scss";
 </style>
