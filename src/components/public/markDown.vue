@@ -9,12 +9,13 @@
 <template>
   <div class="md-wapper">
     <mavon-editor
-    class="md-main"
+      class="md-main"
       ref="md"
       v-model="form.content"
       @imgAdd="handleEditorImgAdd"
       @imgDel="handleEditorImgDel"
       :toolbars="toolbars"
+      @change="changeMd"
     />
   </div>
 </template>
@@ -72,6 +73,12 @@ export default {
   mounted() {},
   methods: {
     /**
+     * changeMd md内容被改变
+     */
+    changeMd(value, render) {
+      this.$emit("handleFormContent", render);
+    },
+    /**
      * 添加图片
      */
     async handleEditorImgAdd(pos, $file) {
@@ -111,28 +118,21 @@ export default {
     /**
      * 删除内容
      */
-    removeContent(){
-        this.form.content = ''
-    }
-  },
-  watch: {
-    form: {
-      handler(newVal) {
-        this.$emit("handleFormContent", newVal.content);
-      },
-      deep: true,
+    removeContent() {
+      this.form.content = "";
     },
   },
+  watch: {},
 };
 </script>
 <style lang='scss' scoped type='text/scss'>
 .md {
   height: 100%;
 }
-.md-main{
-    // max-height: 50vh;
-    &>div{
-        height:100%;
-    }
+.md-main {
+  // max-height: 50vh;
+  & > div {
+    height: 100%;
+  }
 }
 </style>

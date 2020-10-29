@@ -43,16 +43,19 @@
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          <svg-icon
+            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+          />
         </span>
       </el-form-item>
 
       <el-button
         :loading="loading"
         type="primary"
-        style="width:100%;margin-bottom:30px;"
+        style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-      >登录</el-button>
+        >登录</el-button
+      >
     </el-form>
   </div>
 </template>
@@ -78,30 +81,31 @@ export default {
       }
     };
     return {
+      // 1234!@#$Aa
       loginForm: {
-        username: "admin",
-        password: "123456"
+        username: "",
+        password: "",
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", validator: validateUsername }
+          { required: true, trigger: "blur", validator: validateUsername },
         ],
         password: [
-          { required: true, trigger: "blur", validator: validatePassword }
-        ]
+          { required: true, trigger: "blur", validator: validatePassword },
+        ],
       },
       loading: false,
       passwordType: "password",
-      redirect: undefined
+      redirect: undefined,
     };
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect;
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     showPwd() {
@@ -119,7 +123,7 @@ export default {
       // 对整个表单进行校验的方法，参数为一个回调函数。
       // 该回调函数会在校验结束后被调用，并传入两个参数：
       // 是否校验成功和未通过校验的字段。若不传入回调函数，则会返回一个 promise
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;
           this.$store
@@ -136,8 +140,8 @@ export default {
           return false;
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

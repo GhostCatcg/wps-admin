@@ -68,16 +68,20 @@
             width="200"
           ></el-table-column>
           <el-table-column property="content" label="内容"></el-table-column>
-          <!-- <el-table-column fixed="right" label="操作">
+          <el-table-column fixed="right" label="操作">
             <template slot-scope="scope">
+              <el-button @click="handleComment(scope)" slot="reference"
+                >查看评论</el-button
+              >
+              <el-divider direction="vertical"></el-divider>
               <el-popconfirm
-                @onConfirm="deleteRow(scope, tableData)"
+                @onConfirm="deleteRow(scope)"
                 title="这是一段内容确定删除吗？"
               >
                 <el-button slot="reference">删除</el-button>
               </el-popconfirm>
             </template>
-          </el-table-column> -->
+          </el-table-column>
         </el-table>
         <el-pagination
           style="margin-top: 50px"
@@ -87,12 +91,60 @@
           :current-page="pageNum"
           @current-change="changePage"
         >
-          <!-- :page-sizes="pageSize" -->
         </el-pagination>
       </div>
       <span slot="footer" class="dialog-footer">
-        <!-- <el-button @click="searchFlag = false">取 消</el-button> -->
-        <el-button type="primary" @click="searchFlag = false">确定</el-button>
+        <el-button type="primary" @click="closeSearch">确定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      :title="`查看评价`"
+      :visible.sync="evaluationFlag"
+      width="100%"
+      :before-close="handleCloseEva"
+      custom-class="el-search"
+    >
+      <div>
+        <el-table :data="evaluationData">
+          <el-table-column
+            property="creator"
+            label="发表人"
+            width="150"
+          ></el-table-column>
+          <el-table-column
+            property="topicContent"
+            label="内容"
+          ></el-table-column>
+          <el-table-column prop="createTime" label="时间">
+            <template slot-scope="scope">
+              {{ $moment(scope.row.createTime).format("YYYY-DD-MM h:mm:ss a") }}
+            </template>
+          </el-table-column>
+          <el-table-column fixed="right" label="操作">
+            <template slot-scope="scope">
+              <el-popconfirm
+                @onConfirm="deleteEvaRow(scope)"
+                title="这是一段内容确定删除吗？"
+              >
+                <el-button slot="reference">删除</el-button>
+              </el-popconfirm>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          v-if="false"
+          style="margin-top: 50px"
+          background
+          layout="prev, pager, next"
+          :total="total"
+          :current-page="pageNum"
+          @current-change="changePage"
+        >
+        </el-pagination>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="closeSearchEva">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -102,7 +154,13 @@
 import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
-import { updateHour, searchKeyWord } from "@/api/public";
+import {
+  updateHour,
+  searchKeyWord,
+  listTopicTree,
+  delTopic,
+  deleteArticle,
+} from "@/api/public";
 
 export default {
   components: {
@@ -119,13 +177,80 @@ export default {
       pageSize: 10,
       total: 1,
 
+      eduPageNum: 1,
+      eduPageSize: 10,
+      eduTotal: 1,
+
       gridData: [],
+
+      evaluationFlag: false, // 查看评价弹窗
+      evaluationData: [], // 评价数据
     };
   },
   computed: {
     ...mapGetters(["sidebar", "avatar"]),
   },
   methods: {
+    /**
+     * 查看评论
+     */
+    async handleComment(scope) {
+      console.log(scope);
+      const config = {
+        data: {
+          invitId: scope.row.id,
+        },
+      };
+      let res = await listTopicTree(config.data);
+      if (res.code == 0) {
+        this.evaluationData = res.data.data;
+        this.evaluationFlag = true;
+      }
+    },
+    /**
+     * 删除文章
+     */
+    async deleteRow(scope) {
+      console.log(scope);
+      const config = {
+        data: {
+          invitId: scope.row.id,
+        },
+      };
+      let res = await deleteArticle(config.data);
+      if (res.code == 0) {
+        this.search();
+      }
+    },
+    /**
+     * 删除评价
+     */
+    async deleteEvaRow(scope) {
+      console.log(scope);
+      const config = {
+        data: {
+          invitTopicId: scope.row.invitTopicId,
+        },
+      };
+      let res = await delTopic(config.data);
+      if (res.code == 0) {
+        this.evaluationFlag = false;
+        this.search();
+      }
+    },
+    /**
+     * 关闭弹窗
+     */
+    closeSearch() {
+      this.searchFlag = false;
+      this.pageNum = 1;
+    },
+    /**
+     * 关闭评价弹窗
+     */
+    closeSearchEva() {
+      this.evaluationFlag = false;
+    },
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
@@ -134,9 +259,9 @@ export default {
       this.$router.push(`/login?redirect=${this.$route.fullPath}`);
     },
     changePage(val) {
-      console.log(this.pageNum,val);
-      this.pageNum = val
-      this.search()
+      //   console.log(this.pageNum, val);
+      this.pageNum = val;
+      this.search();
     },
     /**
      * 切换审核状态
@@ -174,8 +299,6 @@ export default {
           this.$message("没有搜索到内容");
         } else {
           this.searchResults = res.data.data[0].pageVo;
-          console.log("搜索到的数据", this.searchResults);
-
           this.total = this.searchResults.total;
           this.pageNum = this.searchResults.pageNum;
           this.pageSize = this.searchResults.pageSize;
@@ -184,9 +307,18 @@ export default {
         }
       }
     },
+    /**
+     * 关闭评价弹窗
+     */
+    handleCloseEva() {
+      this.evaluationFlag = false;
+    },
+    /**
+     * 关闭搜索弹窗
+     */
     handleClose() {
       console.log("close");
-      this.pageNum=1
+      this.pageNum = 1;
       this.searchFlag = false;
     },
   },

@@ -178,6 +178,20 @@ export const constantRoutes = [{
       }
     }]
   },
+  {
+    path: 'part',
+    component: Layout,
+    children: [{
+      path: '/part',
+      name: 'part',
+      component: () =>
+        import('@/views/part/index'),
+      meta: {
+        title: '社区',
+        icon: 'el-icon-office-building'
+      }
+    }]
+  },
 
   // 404 page must be placed at the end !!!
   {

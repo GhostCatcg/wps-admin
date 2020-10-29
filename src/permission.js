@@ -26,6 +26,15 @@ router.beforeEach(async (to, from, next) => {
   // determine whether the user has logged in
   const hasToken = getToken()
 
+
+  try {
+    if (store.getters.slideshowType.length == 0) {
+      await store.dispatch("user/getSlideshowType");
+    }
+  } catch {
+
+  }
+
   if (hasToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page

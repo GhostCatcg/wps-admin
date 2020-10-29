@@ -264,7 +264,7 @@ export default {
     async getSlider() {
       const config = {
         data: {
-          pageNum: 1,
+          pageNum: this.currentPage,
           pageSize: 10,
         },
       };

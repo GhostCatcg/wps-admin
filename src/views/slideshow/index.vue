@@ -10,7 +10,13 @@
       style="width: 100%"
     >
       <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="type" label="类型"></el-table-column>
+      <el-table-column prop="type" label="类型">
+        <template slot-scope="scope">
+          <div>
+            {{ typeToText(scope.row.type) }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="img" label="图片">
         <template slot-scope="scope">
           <div class="demo-image__placeholder">
@@ -137,17 +143,12 @@
 
 <script>
 import { mapGetters } from "vuex";
-import {
-  createSlideShow,
-  listSlideShow,
-  delSlideShow,
-  
-} from "@/api/slideshow";
-import { uploadImg,bannerTypeList } from "@/api/public";
+import { createSlideShow, listSlideShow, delSlideShow } from "@/api/slideshow";
+import { uploadImg, bannerTypeList } from "@/api/public";
 export default {
   name: "Slideshow",
   components: {},
-  data () {
+  data() {
     return {
       currentPage: 1, // 当前页
       total: 10, // 总页数
@@ -175,25 +176,37 @@ export default {
       imgSrc: "",
     };
   },
-  created () {
+  created() {
     this.getSlider();
   },
   methods: {
     /**
+     * 根据type 返回文字
+     */
+    typeToText(type) {
+      var typeList = this.$store.getters.slideshowType;
+      var data = typeList.filter((item) => {
+        if(type == item.id){
+            return true
+        }
+      });
+      return data[0].name
+    },
+    /**
      * 删除文件
      */
-    handleRemove (file) {
+    handleRemove(file) {
       console.log(file);
       return false;
     },
-    handlePictureCardPreview (file) {
+    handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.imgFlag = true;
     },
     /**
      * 覆盖默认上传事件，自定义上传
      */
-    async httpRequest (data) {
+    async httpRequest(data) {
       var formData = new FormData();
       formData.append("file", data.file);
       const res = await uploadImg(formData);
@@ -209,14 +222,14 @@ export default {
     /**
      * 上传成功
      */
-    handleAvatarSuccess (res, file) {
+    handleAvatarSuccess(res, file) {
       console.log("上传成功");
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     /**
      * 上传头像之前
      */
-    beforeAvatarUpload (file) {
+    beforeAvatarUpload(file) {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isLt2M) {
@@ -227,10 +240,10 @@ export default {
     /**
      * 下载
      */
-    handleDownload (file) {
+    handleDownload(file) {
       console.log(file);
     },
-    async create () {
+    async create() {
       this.dialogVisible = true;
       const res = await bannerTypeList();
       if (res.code === 0) {
@@ -245,27 +258,27 @@ export default {
     /**
      * 重置表单
      */
-    resetForm (formName) {
+    resetForm(formName) {
       this.dialogVisible = false;
       this.$refs[formName].resetFields();
     },
     /**
      * 提交表单
      */
-    onSubmit (formName) {
+    onSubmit(formName) {
       console.log("submit!");
       this.createSlider();
     },
     /**
      * 关闭弹窗
      */
-    handleClose (done) {
+    handleClose(done) {
       done();
     },
     /**
      * 删除轮播图
      */
-    async deleteRow (index, rows) {
+    async deleteRow(index, rows) {
       this.loading = true;
       const config = {
         data: {
@@ -280,7 +293,7 @@ export default {
     /**
      * 创建轮播图
      */
-    async createSlider () {
+    async createSlider() {
       const config = {
         data: {
           type: this.ruleForm.region,
@@ -294,10 +307,10 @@ export default {
         this.dialogVisible = false;
       }
     },
-    async getSlider () {
+    async getSlider() {
       const config = {
         data: {
-          pageNum: 1,
+          pageNum: this.currentPage,
           pageSize: 10,
         },
       };

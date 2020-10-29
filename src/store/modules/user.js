@@ -4,6 +4,9 @@ import {
   getInfo
 } from '@/api/user'
 import {
+  bannerTypeList
+} from '@/api/public'
+import {
   getToken,
   setToken,
   removeToken
@@ -20,7 +23,8 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    slideshowType: []
   }
 }
 
@@ -38,18 +42,32 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_SLIDESHOWTYPE: (state, data) => {
+    state.slideshowType = data
   }
+
 }
 
 const actions = {
   // user login
   // commit 自身    userInfo 账号密码
-  login({ commit }, userInfo) {
-    const { username, password } = userInfo
+  login({
+    commit
+  }, userInfo) {
+    const {
+      username,
+      password
+    } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), pwd: password }).then(response => {
+      login({
+        username: username.trim(),
+        pwd: password
+      }).then(response => {
         console.log(response)
-        const { data } = response
+        const {
+          data
+        } = response
         commit('SET_TOKEN', data.data.token)
         setToken(data.data.token)
         resolve()
@@ -63,7 +81,6 @@ const actions = {
     commit,
     state
   }) {
-    console.log('11')
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const {
@@ -87,7 +104,20 @@ const actions = {
       })
     })
   },
-
+  // 获取轮播类型
+  async getSlideshowType({
+    commit,
+    state
+  }) {
+    return new Promise((resolve, reject) => {
+      bannerTypeList().then(response => {
+        commit('SET_SLIDESHOWTYPE', response.data.data)
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
   // user logout
   logout({
     commit,

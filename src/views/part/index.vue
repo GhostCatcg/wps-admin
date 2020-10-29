@@ -1,9 +1,9 @@
 /**
 *
 * Author: lvgc
-* CreatDate: 2020-07-30 21:03:54
+* CreatDate: 2020-07-30 20:56:29
 *
-* Description: 作品展示
+* Description: 外包消息
 *
 */
 
@@ -11,7 +11,7 @@
   <div class="slideshow-wapper">
     <!-- <div class="slide-button">
       <el-button type="primary" @click="create">新建</el-button>
-    </div>-->
+    </div> -->
     <el-table
       :data="tableData"
       v-loading="loading"
@@ -20,7 +20,7 @@
     >
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="content" label="内容"></el-table-column>
-      <el-table-column prop="img" label="图片" width="400">
+      <el-table-column prop="img" label="图片">
         <template slot-scope="scope">
           <el-carousel
             height="150px"
@@ -48,33 +48,11 @@
       <el-table-column prop="creator" label="创建人"></el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
-          <!-- <el-link
-            slot="reference"
-            @click="HandleViewReviews(scope, tableData)"
-            type="primary"
-            >查看评论</el-link
-          >
-          <el-divider direction="vertical"></el-divider> -->
-          <el-popconfirm
-            v-if="scope.row.cream == 10"
-            @onConfirm="setFeatured(scope, tableData)"
-            title="确定设为精选？"
-          >
-            <el-link slot="reference" type="primary">设为精选</el-link>
-          </el-popconfirm>
-          <el-popconfirm
-            v-else
-            @onConfirm="delFeatured(scope, tableData)"
-            title="确定取消精选？"
-          >
-            <el-link slot="reference" type="primary">取消精选</el-link>
-          </el-popconfirm>
-          <el-divider direction="vertical"></el-divider>
           <el-popconfirm
             @onConfirm="deleteRow(scope, tableData)"
-            title="这一段内容确定删除吗？"
+            title="这是一段内容确定删除吗？"
           >
-            <el-link slot="reference" type="primary">删除</el-link>
+            <el-button slot="reference">删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -87,6 +65,75 @@
         :total="total"
       ></el-pagination>
     </div>
+
+    <el-dialog
+      title="新建轮播图"
+      :visible.sync="dialogVisible"
+      width="50%"
+      :before-close="handleClose"
+    >
+      <div>
+        <el-form ref="ruleForm" :model="ruleForm" label-width="80px">
+          <el-form-item label="所属页面" prop="region">
+            <el-select v-model="ruleForm.region" placeholder="请选择所属页面">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="图片名称" prop="name">
+            <el-input v-model="ruleForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="图片内容" prop="desc">
+            <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+          </el-form-item>
+          <el-form-item label="上传图片">
+            <el-upload action="#" list-type="picture-card" :auto-upload="false">
+              <i slot="default" class="el-icon-plus"></i>
+              <div slot="file" slot-scope="{ file }">
+                <img
+                  class="el-upload-list__item-thumbnail"
+                  :src="file.url"
+                  alt
+                />
+                <span class="el-upload-list__item-actions">
+                  <span
+                    class="el-upload-list__item-preview"
+                    @click="handlePictureCardPreview(file)"
+                  >
+                    <i class="el-icon-zoom-in"></i>
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleDownload(file)"
+                  >
+                    <i class="el-icon-download"></i>
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleRemove(file)"
+                  >
+                    <i class="el-icon-delete"></i>
+                  </span>
+                </span>
+              </div>
+            </el-upload>
+            <el-dialog :visible.sync="imgFlag">
+              <img width="100%" :src="dialogImageUrl" alt />
+            </el-dialog>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+        <el-button type="primary" @click="onSubmit">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -96,16 +143,14 @@ import {
   createBlackList,
   getList,
   delSlideShow,
-  creamDemo,
-  delCreamDemo,
-  listTopicTree
-} from "@/api/demo";
+} from "@/api/part";
 // import { conversionDate } from "@/utils/tools.js";
 import { bannerTypeList } from "@/api/public";
 
 export default {
   name: "Slideshow",
-  components: {},
+  components: {
+  },
   data () {
     return {
       currentPage: 1, // 当前页
@@ -142,56 +187,6 @@ export default {
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url;
       this.imgFlag = true;
-    },
-    /**
-     * 查看评价
-     */
-    async HandleViewReviews (index, rows) {
-      const config = {
-        data: {
-          opusId: index.row.opusId
-        }
-      }
-      const res = await listTopicTree(config.data);
-      if (res.code === 0) {
-        console.log(res)
-      }
-    },
-    /**
-     * 取消精选
-     */
-    async delFeatured (index, rows) {
-      const config = {
-        data: {
-          opusId: index.row.opusId
-        }
-      }
-      const res = await delCreamDemo(config.data);
-      if (res.code === 0) {
-        this.$message({
-          message: res.msg,
-          type: 'success'
-        });
-        this.getSlider()
-      }
-    },
-    /**
-     * 设为精选
-    */
-    async setFeatured (index, rows) {
-      const config = {
-        data: {
-          opusId: index.row.opusId
-        }
-      }
-      const res = await creamDemo(config.data);
-      if (res.code === 0) {
-        this.$message({
-          message: res.msg,
-          type: 'success'
-        });
-        this.getSlider()
-      }
     },
     /**
      * 下载
@@ -238,7 +233,7 @@ export default {
       this.loading = true;
       const config = {
         data: {
-          opusId: index.row.opusId,
+          ideaId: index.row.ideaId,
         },
       };
       const res = await delSlideShow(config.data);
@@ -272,12 +267,11 @@ export default {
         this.tableData = res.data.data.items.map((item) => {
           return {
             title: item.title,
-            content: item.content,
+            content: item.requirement,
             img: item.urlList,
             createTime: item.createTime,
             creator: item.creator,
-            opusId: item.opusId,
-            cream: item.cream
+            outerId: item.ideaId,
           };
         });
         this.loading = false;
