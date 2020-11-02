@@ -49,7 +49,9 @@ router.beforeEach(async (to, from, next) => {
       } else {
         try {
           // get user info
-          // await store.dispatch('user/getInfo') // 跳转的时候使用
+          
+        //   await store.dispatch('user/getInfo') // 跳转的时候使用
+
 
           next()
         } catch (error) {

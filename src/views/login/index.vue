@@ -23,11 +23,11 @@
           name="username"
           type="text"
           tabindex="1"
-          auto-complete="on"
+          auto-complete="new-password"
         />
       </el-form-item>
 
-      <el-form-item prop="password">
+      <el-form-item prop="password" data-msg="1234!@#$Aa">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
@@ -39,7 +39,7 @@
           placeholder="Password"
           name="password"
           tabindex="2"
-          auto-complete="on"
+          auto-complete="new-password"
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
@@ -67,15 +67,15 @@ export default {
   name: "Login",
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error("Please enter the correct user name"));
+      if (value == '') {
+        callback(new Error("请输入账号"));
       } else {
         callback();
       }
     };
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error("The password can not be less than 6 digits"));
+      if (value == '') {
+        callback(new Error("请输入密码"));
       } else {
         callback();
       }

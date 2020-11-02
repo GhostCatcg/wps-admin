@@ -1,7 +1,8 @@
 import {
   login,
   logout,
-  getInfo
+  getInfo,
+  getAvatar
 } from '@/api/user'
 import {
   bannerTypeList
@@ -24,7 +25,7 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    slideshowType: []
+    slideshowType: [],
   }
 }
 
@@ -82,7 +83,8 @@ const actions = {
     state
   }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      getAvatar(state.token).then(response => {
+          
         const {
           data
         } = response
@@ -96,7 +98,7 @@ const actions = {
           avatar
         } = data
 
-        commit('SET_NAME', name)
+        commit('SET_NAME', 'yes')
         commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {

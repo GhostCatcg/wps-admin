@@ -192,6 +192,34 @@ export const constantRoutes = [{
       }
     }]
   },
+  {
+    path: 'user',
+    component: Layout,
+    children: [{
+      path: '/user',
+      name: 'user',
+      component: () =>
+        import('@/views/user/index'),
+      meta: {
+        title: '拉黑用户',
+        icon: 'el-icon-warning'
+      }
+    }]
+  },
+  {
+    path: 'avatar',
+    component: Layout,
+    children: [{
+      path: '/avatar',
+      name: 'avatar',
+      component: () =>
+        import('@/views/avatar/index'),
+    //   meta: {
+    //     title: '上传头像',
+    //     icon: 'el-icon-warning'
+    //   }
+    }]
+  },
 
   // 404 page must be placed at the end !!!
   {
