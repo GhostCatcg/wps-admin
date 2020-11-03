@@ -83,8 +83,8 @@ export default {
     return {
       // 1234!@#$Aa
       loginForm: {
-        username: "admin",
-        password: "1234!@#$Aa",
+        username: "",
+        password: "",
       },
       loginRules: {
         username: [
