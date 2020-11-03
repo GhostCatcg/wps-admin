@@ -54,8 +54,13 @@
       </el-form>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="resetForm('ruleForm')">取 消</el-button>
-      <el-button type="primary" @click="onSubmit('ruleForm')">确 定</el-button>
+      <!-- <el-button @click="resetForm('ruleForm')">取 消</el-button> -->
+      <el-button
+        :disabled="disabledFlag"
+        type="primary"
+        @click="onSubmit('ruleForm')"
+        >确 定</el-button
+      >
     </span>
   </div>
 </template>
@@ -83,6 +88,11 @@ export default {
       dialogImageUrl: "",
       imgFlag: false,
       disabled: false,
+
+      imgSrc: "",
+
+      disabledFlag: true,
+      url:''
     };
   },
   created() {},
@@ -96,12 +106,9 @@ export default {
       formData.append("file", data.file);
       const res = await uploadImg(formData);
       if (res.code == 0) {
-        this.$message({
-          message: "上传成功",
-          type: "success",
-        });
-        // this.imgList.push(res.data.data);
         this.imgSrc = res.data.data.key;
+        this.url = res.data.data.url
+        this.disabledFlag = false;
       }
     },
     /**
@@ -110,20 +117,24 @@ export default {
     async updata() {
       const config = {
         data: {
-          key: this.imgSrc,
+          pic: this.imgSrc,
         },
       };
-      console.log(config,'修改头像配置')
       const res = await updataAvatar(config.data);
       if (res.code == 0) {
-        console.log(res);
+        this.$message({
+          message: "修改成功",
+          type: "success",
+        });
+        this.$store.commit("user/SET_AVATAR", this.url);
+        this.$router.push('/')
       }
     },
     /**
      * 上传成功
      */
     handleAvatarSuccess(res, file) {
-      console.log("上传成功");
+    //   console.log("上传成功");
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     /**
@@ -165,13 +176,18 @@ export default {
      * 提交表单
      */
     onSubmit(formName) {
-      console.log("submit!");
+    //   console.log("submit!");
       this.updata();
     },
   },
   watch: {},
 };
 </script>
+<style lang="scss">
+.el-upload-list--picture-card:not(:empty) + .el-upload--picture-card {
+  display: none;
+}
+</style>
 <style lang='scss' scoped type='text/scss'>
 .index-wapper {
   height: 100%;

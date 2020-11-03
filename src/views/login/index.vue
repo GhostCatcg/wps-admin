@@ -9,7 +9,7 @@
       label-position="left"
     >
       <div class="title-container">
-        <h3 class="title">顽皮斯</h3>
+        <!-- <h3 class="title">顽皮斯</h3> -->
       </div>
 
       <el-form-item prop="username">
@@ -19,7 +19,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
+          placeholder="用户名"
           name="username"
           type="text"
           tabindex="1"
@@ -36,7 +36,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="密码"
           name="password"
           tabindex="2"
           auto-complete="new-password"
@@ -83,8 +83,8 @@ export default {
     return {
       // 1234!@#$Aa
       loginForm: {
-        username: "",
-        password: "",
+        username: "admin",
+        password: "1234!@#$Aa",
       },
       loginRules: {
         username: [

@@ -78,6 +78,9 @@
               ></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="跳转文章" prop="go">
+            <el-input v-model="ruleForm.go"></el-input>
+          </el-form-item>
           <el-form-item label="图片名称" prop="name">
             <el-input v-model="ruleForm.name"></el-input>
           </el-form-item>
@@ -167,6 +170,7 @@ export default {
         type: [],
         resource: "",
         desc: "",
+        go: "", // 跳转id
       },
 
       dialogImageUrl: "",
@@ -186,11 +190,11 @@ export default {
     typeToText(type) {
       var typeList = this.$store.getters.slideshowType;
       var data = typeList.filter((item) => {
-        if(type == item.id){
-            return true
+        if (type == item.id) {
+          return true;
         }
       });
-      return data[0].name
+      return data[0].name;
     },
     /**
      * 删除文件
@@ -300,11 +304,13 @@ export default {
           name: this.ruleForm.name,
           content: this.ruleForm.desc,
           pic: this.imgSrc,
+          go: this.ruleForm.go,
         },
       };
       let res = await createSlideShow(config.data);
       if (res.code == 0) {
         this.dialogVisible = false;
+        this.$refs["ruleForm"].resetFields();
       }
     },
     async getSlider() {
@@ -338,6 +344,11 @@ export default {
 };
 </script>
 
+<style lang="scss">
+.el-upload-list--picture-card:not(:empty) + .el-upload--picture-card {
+  display: none;
+}
+</style>
 <style lang="scss" scoped>
 @import "./index";
 </style>

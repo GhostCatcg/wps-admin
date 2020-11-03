@@ -25,11 +25,17 @@ router.beforeEach(async (to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken()
-
-
+  
+  if (store.getters.avatar == '') {
+    try {
+      await store.dispatch("user/getHeadAvatar");
+    } catch {
+    }
+  }
   try {
     if (store.getters.slideshowType.length == 0) {
       await store.dispatch("user/getSlideshowType");
+
     }
   } catch {
 
@@ -49,8 +55,8 @@ router.beforeEach(async (to, from, next) => {
       } else {
         try {
           // get user info
-          
-        //   await store.dispatch('user/getInfo') // 跳转的时候使用
+
+          //   await store.dispatch('user/getInfo') // 跳转的时候使用
 
 
           next()

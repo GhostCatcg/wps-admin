@@ -13,7 +13,8 @@ import {
   removeToken
 } from '@/utils/auth'
 import {
-  resetRouter
+  resetRouter,
+  router
 } from '@/router'
 
 import {
@@ -26,6 +27,7 @@ const getDefaultState = () => {
     name: '',
     avatar: '',
     slideshowType: [],
+    user: {}
   }
 }
 
@@ -46,6 +48,9 @@ const mutations = {
   },
   SET_SLIDESHOWTYPE: (state, data) => {
     state.slideshowType = data
+  },
+  SET_USER: (state, data) => {
+    state.user = data
   }
 
 }
@@ -69,9 +74,36 @@ const actions = {
         const {
           data
         } = response
+        commit('SET_USER', data.data.user)
         commit('SET_TOKEN', data.data.token)
+        localStorage.setItem("pic", data.data.user.pic); // 存入浏览器缓存
+
+
         setToken(data.data.token)
+
         resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  //获取头像
+  getHeadAvatar({
+    commit,
+    state
+  }) {
+    return new Promise((resolve, reject) => {
+      var data = localStorage.getItem("pic");
+      const config = {
+        data: {
+          key: data,
+        },
+      };
+      getAvatar(config.data).then(response => {
+        // console.log('获取头像', response)
+        commit('SET_NAME', 'yes')
+        commit('SET_AVATAR', response.data.data.url)
+        resolve(data)
       }).catch(error => {
         reject(error)
       })
@@ -84,7 +116,7 @@ const actions = {
   }) {
     return new Promise((resolve, reject) => {
       getAvatar(state.token).then(response => {
-          
+
         const {
           data
         } = response
@@ -106,6 +138,7 @@ const actions = {
       })
     })
   },
+
   // 获取轮播类型
   async getSlideshowType({
     commit,
@@ -126,14 +159,9 @@ const actions = {
     state
   }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      removeToken() // must remove  token  first
+      resetRouter()
+      commit('RESET_STATE')
     })
   },
 

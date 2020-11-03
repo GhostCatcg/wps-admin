@@ -19,6 +19,7 @@
       style="width: 100%"
     >
       <el-table-column prop="title" label="标题"></el-table-column>
+      <el-table-column prop="id" label="文章ID"></el-table-column>
       <el-table-column prop="content" label="内容"></el-table-column>
       <el-table-column prop="img" label="图片">
         <template slot-scope="scope">
@@ -272,6 +273,7 @@ export default {
             createTime: item.createTime,
             creator: item.creator,
             outerId: item.outerId,
+            id:item.outerId
           };
         });
         this.loading = false;

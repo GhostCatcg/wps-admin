@@ -19,6 +19,7 @@
       style="width: 100%"
     >
       <el-table-column prop="title" label="标题"></el-table-column>
+      <el-table-column prop="id" label="文章ID"></el-table-column>
       <el-table-column prop="content" label="内容">
         <template slot-scope="scope">
           <el-link @click="seeContent(scope.row.content)" type="primary"
@@ -280,6 +281,8 @@ export default {
             createTime: item.createTime,
             creator: item.creator,
             exceciseId: item.exceciseId,
+            id: item.exceciseId,
+
           };
         });
         this.loading = false;

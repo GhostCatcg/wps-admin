@@ -8,7 +8,7 @@
     <div class="switch">
       <el-button @click="switchReview">切换审核状态</el-button>
     </div>
-    <div class="search">
+    <div class="search" v-if="false">
       <el-input
         placeholder="请输入要搜索的内容"
         v-model="searchContent"
@@ -28,12 +28,15 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img src="@/assets/avatar.jpg" class="user-avatar" />
+          <img :src="user.avatar" class="user-avatar" />
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
             <el-dropdown-item> 首页 </el-dropdown-item>
+          </router-link>
+          <router-link to="/avatar">
+            <el-dropdown-item> 修改头像 </el-dropdown-item>
           </router-link>
           <!-- <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
             <el-dropdown-item>Github</el-dropdown-item>
@@ -151,7 +154,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
 import {
@@ -161,7 +164,7 @@ import {
   delTopic,
   deleteArticle,
 } from "@/api/public";
-
+import { getAvatar } from "@/api/user";
 export default {
   components: {
     Breadcrumb,
@@ -188,7 +191,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar"]),
+    ...mapGetters(["sidebar"]),
+    ...mapState(["user"]),
+  },
+  created() {
   },
   methods: {
     /**

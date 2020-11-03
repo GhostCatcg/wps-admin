@@ -21,6 +21,7 @@
       style="width: 100%"
     >
       <el-table-column prop="title" label="标题"></el-table-column>
+      <el-table-column prop="id" label="文章ID"></el-table-column>
       <el-table-column prop="content" label="内容">
         <template slot-scope="scope">
           <el-link @click="seeContent(scope.row.content)" type="primary"
@@ -28,26 +29,6 @@
           >
         </template>
       </el-table-column>
-      <!-- <el-table-column prop="img" label="图片">
-        <template slot-scope="scope">
-          <el-carousel
-            height="150px"
-            v-if="scope.row.img && scope.row.img.length != 0"
-          >
-            <el-carousel-item v-for="item in scope.row.img" :key="item">
-              <el-image :src="item">
-                <div slot="placeholder" class="image-slot">
-                  加载中
-                  <span class="dot">...</span>
-                </div>
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
-            </el-carousel-item>
-          </el-carousel>
-        </template>
-      </el-table-column> -->
       <el-table-column prop="createTime" label="创建日期">
         <template slot-scope="scope">
           {{ $moment(scope.row.createTime).format("YYYY-DD-MM h:mm:ss a") }}
@@ -291,6 +272,7 @@ export default {
             createTime: item.createTime,
             creator: item.creator,
             blackId: item.blackId,
+            id: item.blackId,
           };
         });
         this.loading = false;
@@ -322,7 +304,7 @@ export default {
 }
 .el-md-look-class {
   height: 100%;
-  margin-top:0 !important;
+  margin-top: 0 !important;
   overflow: auto;
   .el-dialog__footer {
     padding: 10px 40px 20px;
@@ -334,7 +316,7 @@ export default {
     }
   }
   .el-dialog__body {
-    padding: 10px 20px  50px;
+    padding: 10px 20px 50px;
   }
 }
 </style>

@@ -214,10 +214,10 @@ export const constantRoutes = [{
       name: 'avatar',
       component: () =>
         import('@/views/avatar/index'),
-    //   meta: {
-    //     title: '上传头像',
-    //     icon: 'el-icon-warning'
-    //   }
+      //   meta: {
+      //     title: '上传头像',
+      //     icon: 'el-icon-warning'
+      //   }
     }]
   },
 
@@ -241,6 +241,9 @@ const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
+  router.push({
+    path: '/login'
+  })
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }

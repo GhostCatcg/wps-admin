@@ -15,7 +15,7 @@
       class="slideshow-table"
       style="width: 100%"
     >
-      <el-table-column prop="avatar" label="头像">
+      <!-- <el-table-column prop="avatar" label="头像">
         <template slot-scope="scope">
           <el-image :src="scope.row.avatar">
             <div slot="placeholder" class="image-slot">
@@ -27,42 +27,32 @@
             </div>
           </el-image>
         </template>
-      </el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="sex" label="性别"></el-table-column>
-      <!-- <el-table-column prop="img" label="图片">
-        <template slot-scope="scope">
-          <el-carousel
-            height="150px"
-            v-if="scope.row.img && scope.row.img.length != 0"
-          >
-            <el-carousel-item v-for="item in scope.row.img" :key="item">
-              <el-image :src="item">
-                <div slot="placeholder" class="image-slot">
-                  加载中
-                  <span class="dot">...</span>
-                </div>
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
-            </el-carousel-item>
-          </el-carousel>
-        </template>
       </el-table-column> -->
+      <el-table-column prop="name" label="姓名"></el-table-column>
+      <el-table-column prop="sex" label="性别">
+        <template slot-scope="scope">
+          {{ scope.row.sex == 10 ? "女" : "男" }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="phone" label="手机号"> </el-table-column>
+      <el-table-column prop="status" label="拉黑">
+        <template slot-scope="scope">
+          {{ scope.row.status == 201 ? "黑用户" : "白用户" }}
+        </template>
+      </el-table-column>
+
       <el-table-column prop="createTime" label="创建日期">
         <template slot-scope="scope">
           {{ $moment(scope.row.createTime).format("YYYY-DD-MM h:mm:ss a") }}
         </template>
       </el-table-column>
-      <!-- <el-table-column prop="creator" label="创建人"></el-table-column> -->
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-popconfirm
-            @onConfirm="pullBlack(scope, tableData)"
-            title="这是一段内容确定拉黑吗？"
+            @onConfirm="pull(scope, scope.row.status)"
+            :title="`这是一段内容确定${scope.row.status == 201 ? '启用' : '拉黑'}吗？`"
           >
-            <el-button slot="reference">拉黑</el-button>
+            <el-button slot="reference">{{scope.row.status == 201 ? '启用' : '拉黑'}}</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -150,7 +140,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { userList, userStart, startStopList } from "@/api/userBlack";
+import { userList, userStart, userStop, startStopList } from "@/api/userBlack";
 // import { conversionDate } from "@/utils/tools.js";
 import { bannerTypeList } from "@/api/public";
 
@@ -235,11 +225,36 @@ export default {
     /**
      * 拉黑用户
      */
-    async pullBlack(index, rows) {
+    pull(data, val) {
+      if (val == 10) {
+        this.pullBlack(data);
+      } else if (val == 201) {
+        this.pullWhite(data);
+      }
+    },
+    /**
+     * 拉黑用户
+     */
+    async pullBlack(data) {
       this.loading = true;
       const config = {
         data: {
-          userId: index.row.userId,
+          userId: data.row.userId,
+        },
+      };
+      const res = await userStop(config.data);
+      if (res.code === 0) {
+        this.getUserList();
+      }
+    },
+    /**
+     * 拉白用户
+     */
+    async pullWhite(data) {
+      this.loading = true;
+      const config = {
+        data: {
+          userId: data.row.userId,
         },
       };
       const res = await userStart(config.data);
@@ -275,7 +290,7 @@ export default {
       };
       const res = await userList(config.data);
       if (res.code === 0) {
-        console.log(res, "用户列表");
+        // console.log(res, "用户列表");
         this.currentPage = res.data.data.pageNum;
         this.total = res.data.data.total;
         this.tableData = res.data.data.items.map((item) => {
@@ -289,6 +304,7 @@ export default {
             createTime: item.createTime,
             wx: item.wx,
             userId: item.userId,
+            status: item.status,
           };
         });
         this.loading = false;
