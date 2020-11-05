@@ -15,7 +15,7 @@
       class="slideshow-table"
       style="width: 100%"
     >
-      <!-- <el-table-column prop="avatar" label="头像">
+      <el-table-column prop="avatar" label="头像">
         <template slot-scope="scope">
           <el-image :src="scope.row.avatar">
             <div slot="placeholder" class="image-slot">
@@ -27,7 +27,7 @@
             </div>
           </el-image>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column prop="name" label="姓名"></el-table-column>
       <el-table-column prop="sex" label="性别">
         <template slot-scope="scope">
@@ -299,7 +299,7 @@ export default {
             sex: item.sex,
             phone: item.phone,
             content: item.requirement,
-            avatar: item.pic,
+            avatar: item.url,
             address: item.address,
             createTime: item.createTime,
             wx: item.wx,

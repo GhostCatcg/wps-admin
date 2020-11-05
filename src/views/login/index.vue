@@ -9,7 +9,7 @@
       label-position="left"
     >
       <div class="title-container">
-        <!-- <h3 class="title">顽皮斯</h3> -->
+        <h3 class="title">顽皮斯</h3>
       </div>
 
       <el-form-item prop="username">
@@ -148,7 +148,6 @@ export default {
 <style lang="scss">
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
 $bg: #fff;
 $light_gray: #fff;
 $cursor: #fff;
@@ -178,7 +177,7 @@ $cursor: #fff;
 
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
+        // -webkit-text-fill-color: $cursor !important;
       }
     }
   }
