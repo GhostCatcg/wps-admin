@@ -1,7 +1,6 @@
 import {
   login,
   logout,
-  getInfo,
   getAvatar
 } from '@/api/user'
 import {

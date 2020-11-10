@@ -12,7 +12,12 @@
     <!-- <div class="slide-button">
       <el-button type="primary" @click="create">新建</el-button>
     </div> -->
-    <el-table :data="tableData" v-loading="loading" class="slideshow-table" style="width: 100%">
+    <el-table
+      :data="tableData"
+      v-loading="loading"
+      class="slideshow-table"
+      style="width: 100%"
+    >
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="id" label="文章ID"></el-table-column>
       <el-table-column prop="content" label="内容"></el-table-column>
@@ -41,7 +46,10 @@
       <el-table-column prop="creator" label="创建人"></el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
-          <el-popconfirm @onConfirm="deleteRow(scope, tableData)" title="这是一段内容确定删除吗？">
+          <el-popconfirm
+            @onConfirm="deleteRow(scope, tableData)"
+            title="这是一段内容确定删除吗？"
+          >
             <el-button slot="reference">删除</el-button>
           </el-popconfirm>
         </template>
@@ -53,10 +61,16 @@
         layout="prev, pager, next"
         :current-page="currentPage"
         :total="total"
+        @current-change="pageChange"
       ></el-pagination>
     </div>
 
-    <el-dialog title="新建轮播图" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+    <el-dialog
+      title="新建轮播图"
+      :visible.sync="dialogVisible"
+      width="50%"
+      :before-close="handleClose"
+    >
       <div>
         <el-form ref="ruleForm" :model="ruleForm" label-width="80px">
           <el-form-item label="所属页面" prop="region">
@@ -78,8 +92,12 @@
           <el-form-item label="上传图片">
             <el-upload action="#" list-type="picture-card" :auto-upload="false">
               <i slot="default" class="el-icon-plus"></i>
-              <div slot="file" slot-scope="{file}">
-                <img class="el-upload-list__item-thumbnail" :src="file.url" alt />
+              <div slot="file" slot-scope="{ file }">
+                <img
+                  class="el-upload-list__item-thumbnail"
+                  :src="file.url"
+                  alt
+                />
                 <span class="el-upload-list__item-actions">
                   <span
                     class="el-upload-list__item-preview"
@@ -120,11 +138,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import {
-  createBlackList,
-  getList,
-  delSlideShow,
-} from "@/api/job";
+import { createBlackList, getList, delSlideShow } from "@/api/job";
 // import { conversionDate } from "@/utils/tools.js";
 import { bannerTypeList } from "@/api/public";
 
@@ -231,6 +245,14 @@ export default {
       let res = await createBlackList();
     },
     /**
+     * 页码发生改变
+     */
+    getSlider(page) {
+      this.currentPage = page;
+      this.loading = true;
+      this.getUserList();
+    },
+    /**
      * 获取
      */
     async getSlider() {
@@ -252,7 +274,7 @@ export default {
             createTime: item.createTime,
             creator: item.creator,
             jobId: item.jobId,
-            id:item.jobId
+            id: item.jobId,
           };
         });
         this.loading = false;

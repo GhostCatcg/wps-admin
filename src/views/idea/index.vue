@@ -64,6 +64,7 @@
         layout="prev, pager, next"
         :current-page="currentPage"
         :total="total"
+        @current-change="pageChange"
       ></el-pagination>
     </div>
 
@@ -249,6 +250,14 @@ export default {
         data: {},
       };
       let res = await createBlackList();
+    },
+    /**
+     * 页码发生改变
+     */
+    pageChange(page) {
+      this.currentPage = page;
+      this.loading = true;
+      this.getSlider();
     },
     /**
      * 获取

@@ -57,6 +57,7 @@
         layout="prev, pager, next"
         :current-page="currentPage"
         :total="total"
+        @current-change="pageChange"
       ></el-pagination>
     </div>
 
@@ -313,6 +314,17 @@ export default {
         this.$refs["ruleForm"].resetFields();
       }
     },
+    /**
+     * 页码发生改变
+     */
+    getSlider(page) {
+      this.currentPage = page;
+      this.loading = true;
+      this.getSlider();
+    },
+    /**
+     * 获取数据
+     */
     async getSlider() {
       const config = {
         data: {

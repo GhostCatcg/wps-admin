@@ -9,6 +9,17 @@
 
 <template>
   <div class="slideshow-wapper">
+    <el-input
+      placeholder="请输入姓名搜索"
+      v-model.trim="searchContent"
+      class="input-with-select"
+    >
+      <el-button
+        @click="searchUser"
+        slot="append"
+        icon="el-icon-search"
+      ></el-button>
+    </el-input>
     <el-table
       :data="tableData"
       v-loading="loading"
@@ -50,9 +61,13 @@
         <template slot-scope="scope">
           <el-popconfirm
             @onConfirm="pull(scope, scope.row.status)"
-            :title="`这是一段内容确定${scope.row.status == 201 ? '启用' : '拉黑'}吗？`"
+            :title="`这是一段内容确定${
+              scope.row.status == 201 ? '启用' : '拉黑'
+            }吗？`"
           >
-            <el-button slot="reference">{{scope.row.status == 201 ? '启用' : '拉黑'}}</el-button>
+            <el-button slot="reference">{{
+              scope.row.status == 201 ? "启用" : "拉黑"
+            }}</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -168,6 +183,8 @@ export default {
         desc: "",
       },
 
+      searchContent: "",
+
       dialogImageUrl: "",
       imgFlag: false,
       disabled: false,
@@ -272,10 +289,18 @@ export default {
       let res = await createBlackList();
     },
     /**
+     * 搜索用户
+     */
+    searchUser() {
+      this.currentPage = 1;
+      this.getUserList();
+    },
+    /**
      * 页码发生改变
      */
     pageChange(page) {
       this.currentPage = page;
+      this.loading = true;
       this.getUserList();
     },
     /**
@@ -286,6 +311,7 @@ export default {
         data: {
           pageNum: this.currentPage,
           pageSize: 10,
+          name: this.searchContent,
         },
       };
       const res = await userList(config.data);

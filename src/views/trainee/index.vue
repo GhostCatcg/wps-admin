@@ -57,6 +57,7 @@
         background
         layout="prev, pager, next"
         :current-page="currentPage"
+        @current-change="pageChange"
         :total="total"
       ></el-pagination>
     </div>
@@ -258,6 +259,14 @@ export default {
       if (res.code === 0) {
         this.getSlider();
       }
+    },
+    /**
+     * 页码发生改变
+     */
+    getSlider(page) {
+      this.currentPage = page;
+      this.loading = true;
+      this.getSlider();
     },
     /**
      * 获取
