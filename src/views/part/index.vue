@@ -235,7 +235,7 @@ export default {
       this.loading = true;
       const config = {
         data: {
-          outerId: index.row.ideaId,
+          ideaId: index.row.ideaId,
         },
       };
       const res = await delSlideShow(config.data);
@@ -255,7 +255,7 @@ export default {
     /**
      * 页码发生改变
      */
-    getSlider(page) {
+    pageChange(page) {
       this.currentPage = page;
       this.loading = true;
       this.getSlider();
@@ -277,11 +277,11 @@ export default {
         this.tableData = res.data.data.items.map((item) => {
           return {
             title: item.title,
-            content: item.requirement,
+            content: item.content,
             img: item.urlList,
             createTime: item.createTime,
             creator: item.creator,
-            outerId: item.ideaId,
+            ideaId: item.ideaId,
             id: item.ideaId,
           };
         });
