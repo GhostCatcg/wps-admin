@@ -1,46 +1,45 @@
 /**
 *
-* Author: lvgc
-* CreatDate: 2020-07-30 20:51:34
+* Author: GhostCat
+* CreatDate: 2020-11-28 13:31:03
 *
-* Description: 奇思妙想
+* Description: 敏感词 
+*
+*/
+/**
+*
+* Author: lvgc
+* CreatDate: 2020-07-30 20:56:29
+*
+* Description: 外包消息
 *
 */
 
 <template>
   <div class="slideshow-wapper">
-    <!-- <div class="slide-button">
+    <div class="slide-button1">
+      <el-input
+        placeholder="请输入敏感词搜索"
+        v-model.trim="searchContent"
+        class="input-with-select"
+        @keyup.enter.native="searchVocabulary"
+      >
+        <el-button
+          @click="searchVocabulary"
+          slot="append"
+          icon="el-icon-search"
+        ></el-button>
+      </el-input>
       <el-button type="primary" @click="create">新建</el-button>
-    </div> -->
+    </div>
+
     <el-table
       :data="tableData"
       v-loading="loading"
       class="slideshow-table"
       style="width: 100%"
     >
-      <el-table-column prop="title" label="标题"></el-table-column>
-      <el-table-column prop="id" label="文章ID"></el-table-column>
-      <el-table-column prop="content" label="内容"></el-table-column>
-      <el-table-column prop="img" label="图片">
-        <template slot-scope="scope">
-          <el-carousel
-            height="150px"
-            v-if="scope.row.img && scope.row.img.length != 0"
-          >
-            <el-carousel-item v-for="item in scope.row.img" :key="item">
-              <el-image :src="item">
-                <div slot="placeholder" class="image-slot">
-                  加载中
-                  <span class="dot">...</span>
-                </div>
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
-            </el-carousel-item>
-          </el-carousel>
-        </template>
-      </el-table-column>
+      <el-table-column prop="name" label="敏感词"></el-table-column>
       <el-table-column prop="createTime" label="创建日期">
         <template slot-scope="scope">
           {{ $moment(scope.row.createTime).format("YYYY-DD-MM h:mm:ss a") }}
@@ -63,71 +62,21 @@
         background
         layout="prev, pager, next"
         :current-page="currentPage"
-        :total="total"
         @current-change="pageChange"
+        :total="total"
       ></el-pagination>
     </div>
-  
+
     <el-dialog
-      title="新建轮播图"
+      title="新建敏感词"
       :visible.sync="dialogVisible"
       width="50%"
       :before-close="handleClose"
     >
       <div>
         <el-form ref="ruleForm" :model="ruleForm" label-width="80px">
-          <el-form-item label="所属页面" prop="region">
-            <el-select v-model="ruleForm.region" placeholder="请选择所属页面">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="图片名称" prop="name">
+          <el-form-item label="敏感词汇" prop="name">
             <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="图片内容" prop="desc">
-            <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-          </el-form-item>
-          <el-form-item label="上传图片">
-            <el-upload action="#" list-type="picture-card" :auto-upload="false">
-              <i slot="default" class="el-icon-plus"></i>
-              <div slot="file" slot-scope="{ file }">
-                <img
-                  class="el-upload-list__item-thumbnail"
-                  :src="file.url"
-                  alt
-                />
-                <span class="el-upload-list__item-actions">
-                  <span
-                    class="el-upload-list__item-preview"
-                    @click="handlePictureCardPreview(file)"
-                  >
-                    <i class="el-icon-zoom-in"></i>
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleDownload(file)"
-                  >
-                    <i class="el-icon-download"></i>
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleRemove(file)"
-                  >
-                    <i class="el-icon-delete"></i>
-                  </span>
-                </span>
-              </div>
-            </el-upload>
-            <el-dialog :visible.sync="imgFlag">
-              <img width="100%" :src="dialogImageUrl" alt />
-            </el-dialog>
           </el-form-item>
         </el-form>
       </div>
@@ -142,16 +91,17 @@
 <script>
 import { mapGetters } from "vuex";
 import {
-  createBlackList,
-  getList,
-  delSlideShow,
-} from "@/api/idea";
+  wordCreate,
+  wordList,
+  wordDelete,
+} from "@/api/sensitive";
 // import { conversionDate } from "@/utils/tools.js";
 import { bannerTypeList } from "@/api/public";
 
 export default {
   name: "Slideshow",
-  components: {},
+  components: {
+  },
   data () {
     return {
       currentPage: 1, // 当前页
@@ -164,14 +114,9 @@ export default {
       value: "",
       ruleForm: {
         name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
       },
+
+      searchContent: '', // 敏感词搜索
 
       dialogImageUrl: "",
       imgFlag: false,
@@ -217,9 +162,21 @@ export default {
     /**
      * 提交表单
      */
-    onSubmit () {
-      console.log("submit!");
-      this.dialogVisible = false;
+    async onSubmit () {
+      const config = {
+        data: {
+          name: this.ruleForm.name
+        }
+      }
+      let res = await wordCreate(config.data)
+      if (res.code === 0) {
+      this.$refs['ruleForm'].resetFields();
+
+          this.searchContent = ''
+          this.getSlider()
+        this.dialogVisible = false;
+
+      }
     },
     /**
      * 关闭弹窗
@@ -234,10 +191,10 @@ export default {
       this.loading = true;
       const config = {
         data: {
-          ideaId: index.row.ideaId,
+          wrongWordId: index.row.wrongWordId,
         },
       };
-      const res = await delSlideShow(config.data);
+      const res = await wordDelete(config.data);
       if (res.code === 0) {
         this.getSlider();
       }
@@ -249,14 +206,21 @@ export default {
       const config = {
         data: {},
       };
-      let res = await createBlackList();
+      let res = await wordCreate();
     },
     /**
      * 页码发生改变
      */
-    pageChange(page) {
+    pageChange (page) {
       this.currentPage = page;
       this.loading = true;
+      this.getSlider();
+    },
+    /**
+     * 搜索词汇
+     */
+    searchVocabulary () {
+      this.currentPage = 1;
       this.getSlider();
     },
     /**
@@ -267,21 +231,19 @@ export default {
         data: {
           pageNum: this.currentPage,
           pageSize: 10,
+          name: this.searchContent
         },
       };
-      const res = await getList(config.data);
+      const res = await wordList(config.data);
       if (res.code === 0) {
         this.currentPage = res.data.data.pageNum;
         this.total = res.data.data.total;
         this.tableData = res.data.data.items.map((item) => {
           return {
-            title: item.title,
-            content: item.content,
-            img: item.urlList,
+            name: item.name,
             createTime: item.createTime,
             creator: item.creator,
-            ideaId: item.ideaId,
-            id:item.ideaId
+            wrongWordId: item.wrongWordId,
           };
         });
         this.loading = false;

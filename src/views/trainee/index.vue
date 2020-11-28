@@ -269,6 +269,14 @@ export default {
       this.getSlider();
     },
     /**
+     * 页码发生改变
+     */
+    pageChange(page) {
+      this.currentPage = page;
+      this.loading = true;
+      this.getSlider();
+    },
+    /**
      * 获取
      */
     async getSlider() {

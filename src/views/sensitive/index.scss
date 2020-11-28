@@ -1,0 +1,35 @@
+.slideshow-wapper {
+  height: 100%;
+  background: #fff;
+  padding: 20px;
+
+  .slide-button {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .slide-button1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: cneter;
+    .input-with-select{
+      margin-right:40px;
+      flex:1;
+    }
+  }
+
+  .slideshow-table {
+    height: 100%;
+    margin: 20px 0;
+  }
+}
+
+.dashboard {
+  &-container {
+    margin: 30px; 
+  }
+
+  &-text {
+    font-size: 30px;
+    line-height: 46px;
+  }
+}

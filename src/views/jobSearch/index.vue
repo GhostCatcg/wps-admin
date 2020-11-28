@@ -234,7 +234,7 @@ export default {
     /**
      * 页码发生改变
      */
-    getSlider(page) {
+    pageChange(page) {
       this.currentPage = page;
       this.loading = true;
       this.getSlider();

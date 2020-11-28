@@ -13,6 +13,7 @@
       placeholder="请输入姓名搜索"
       v-model.trim="searchContent"
       class="input-with-select"
+      @keyup.enter.native="searchContent" 
     >
       <el-button
         @click="searchUser"

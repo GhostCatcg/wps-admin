@@ -207,6 +207,20 @@ export const constantRoutes = [{
     }]
   },
   {
+    path: 'sensitive',
+    component: Layout,
+    children: [{
+      path: '/sensitive',
+      name: 'sensitive',
+      component: () =>
+        import('@/views/sensitive/index'),
+      meta: {
+        title: '敏感词汇',
+        icon: 'el-icon-error'
+      }
+    }]
+  },
+  {
     path: 'avatar',
     component: Layout,
     children: [{
